@@ -1,0 +1,87 @@
+{
+  "url": "https://waveridersurf.com/",
+  "title": "Surfit - AI Wave Rider",
+  "siteType": "spa",
+  "stats": {
+    "totalLinksFound": 22,
+    "totalScrollSections": 5,
+    "internalLinks": 0,
+    "externalLinks": 22,
+    "groups": 4
+  },
+  "groups": [
+    {
+      "name": "External: www.windy.com",
+      "type": "external",
+      "pattern": null,
+      "totalUrls": 1,
+      "representative": [],
+      "sampleUrls": [
+        "https://www.windy.com/?waves%2C30.392%2C-28.125%2C3="
+      ]
+    },
+    {
+      "name": "External: www.google.com",
+      "type": "external",
+      "pattern": null,
+      "totalUrls": 11,
+      "representative": [],
+      "sampleUrls": [
+        "https://www.google.com/travel/explore?q=surfing",
+        "https://www.google.com/maps/search?api=1&query=Pipeline+surf+spot+Oahu%2C+Hawaii",
+        "https://www.google.com/maps/search?api=1&query=Teahupo%27o+surf+spot+Tahiti%2C+French+Polynesia"
+      ]
+    },
+    {
+      "name": "External: www.surfline.com",
+      "type": "external",
+      "pattern": null,
+      "totalUrls": 10,
+      "representative": [],
+      "sampleUrls": [
+        "https://www.surfline.com/search/Pipeline",
+        "https://www.surfline.com/search/Teahupo'o",
+        "https://www.surfline.com/search/Uluwatu"
+      ]
+    },
+    {
+      "name": "SPA scroll sections",
+      "type": "scroll-section",
+      "pattern": null,
+      "totalUrls": 5,
+      "representative": [
+        {
+          "elementId": null,
+          "tag": "div",
+          "heading": "Biomechanical Analysis",
+          "position": "top"
+        },
+        {
+          "elementId": null,
+          "tag": "div",
+          "heading": null,
+          "position": "middle"
+        },
+        {
+          "elementId": null,
+          "tag": "div",
+          "heading": "Surf Shop",
+          "position": "middle"
+        },
+        {
+          "elementId": null,
+          "tag": "div",
+          "heading": "Adventure & Advice",
+          "position": "middle"
+        },
+        {
+          "elementId": null,
+          "tag": "div",
+          "heading": "Top 10 World Surf Spots & Trainer",
+          "position": "middle"
+        }
+      ],
+      "sampleUrls": []
+    }
+  ]
+}
