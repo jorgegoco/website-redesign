@@ -2,6 +2,39 @@
 
 Read this entire file before starting any task.
 
+---
+
+## Project Purpose
+
+This is a **personal reusable boilerplate** for redesigning client websites end-to-end. The goal is a polished, reliable workflow that goes from a live URL to a deployable Next.js landing page — repeatable across different clients and industries.
+
+### Entry points
+
+- **`webapp-redesign` skill** — the orchestrator that chains all 6 skills in sequence. Start here when running a redesign.
+- **This file (CLAUDE.md)** — project context, rules, and constraints. Read before every session.
+
+### Skill chain
+
+```
+webapp-analyzer → design-researcher → design-spec → component-generator → nextjs-assembler → live-reviewer
+```
+
+Each skill has its own `SKILL.md` in `.claude/skills/{skill-name}/`. Skills are evaluated and improved individually.
+
+### Current audit material
+
+`surfit-ia-a/`, `surfit-ia-b/`, `surfit-ia-c/` — three built Next.js outputs representing design directions A, B, C for waveridersurf.com (generated via `.redesign/waveridersurf.com/v4/`). Use these to audit skill outputs and improve SKILL.md files one by one.
+
+### Key directories
+
+| Path | Purpose |
+|---|---|
+| `.claude/skills/` | Skill definitions (SKILL.md files) |
+| `.redesign/` | Versioned artifacts per domain (analysis, spec, components, screenshots) |
+| `surfit-ia-{a,b,c}/` | Current reference outputs for skill auditing |
+
+---
+
 ## Self-Correcting Rules Engine
 
 This file contains a growing ruleset that improves over time. **At session start, read the entire "Learned Rules" section before doing anything.**
