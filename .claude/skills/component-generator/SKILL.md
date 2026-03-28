@@ -244,6 +244,7 @@ Every generated component MUST satisfy ALL of these:
 - [ ] No `href="#"` — every link has a real target, `#section-id`, or `#TODO-replace` with comment
 - [ ] No navigational `<Button>` without `asChild` — when a Button links somewhere, use `<Button asChild><a href="...">text</a></Button>`; never nest `<a>` inside `<Button>` without `asChild`, and never nest `<Button>` inside `<a>` — both produce invalid HTML
 - [ ] `<SheetTrigger asChild>` — always pass `asChild` to SheetTrigger; omitting it creates a `<button>` inside `<button>` and causes a React hydration error
+- [ ] Never use `clipPath: "inset(100% 0 0 0)"` as the `initial` state in `whileInView` animations — if the element is already in the viewport on mount (e.g., direct nav link click), IntersectionObserver never fires the entrance transition and the element stays permanently invisible. Use `opacity: 0, y: 30` instead, which degrades gracefully
 - [ ] Language consistency — all text matches the page's declared `lang` attribute
 - [ ] Language toggle (if present) is functional — has `useState` + conditional rendering
 - [ ] Image sources are distinct from other design directions (no shared `<img src>` across A/B/C)
