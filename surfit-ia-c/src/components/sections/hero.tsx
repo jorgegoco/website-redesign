@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { ChevronDown, Cpu, MapPin, Radio } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 const scrambleChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 const brandText = "SURFIT.IA"
@@ -54,6 +55,7 @@ export default function Hero() {
   const { display, done } = useTextScramble(brandText, 800, 50)
   const { scrollYProgress } = useScroll()
   const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"])
+  const { t } = useLanguage()
 
   return (
     <section
@@ -82,7 +84,7 @@ export default function Hero() {
             className="text-sm font-bold uppercase tracking-[0.3em] text-cyan-400 mb-6"
             style={{ fontFamily: "Outfit, sans-serif" }}
           >
-            AI-POWERED SURF COACHING
+            {t.hero.eyebrow}
           </motion.p>
 
           <div className="relative mb-6">
@@ -113,7 +115,7 @@ export default function Hero() {
             className="text-2xl md:text-3xl lg:text-4xl font-medium text-teal-200 mb-10 max-w-2xl mx-auto lg:mx-0"
             style={{ fontFamily: "DM Sans, sans-serif" }}
           >
-            Master the science of surfing with artificial intelligence
+            {t.hero.subheading}
           </motion.p>
 
           <motion.div
@@ -122,19 +124,11 @@ export default function Hero() {
             transition={{ type: "spring", stiffness: 200, damping: 15, delay: 1.5 }}
             className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
           >
-            {/* TODO: Replace href with actual app dashboard URL */}
             <Button
               asChild
               className="bg-gradient-to-r from-cyan-400 to-rose-500 text-teal-950 font-bold rounded-full px-8 py-4 text-lg hover:shadow-[0_0_50px_rgba(34,211,238,0.5)] hover:scale-105 hover:-translate-y-0.5 transition-all duration-200 focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-950"
             >
-              <a href="#TODO-dashboard-url">Enter Dashboard</a>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              className="border-2 border-cyan-400 text-cyan-400 rounded-full px-8 py-4 text-lg bg-transparent hover:bg-cyan-400/10 hover:text-white hover:border-white transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-950"
-            >
-              <a href="#spots">Explore Spots</a>
+              <a href="#spots">{t.hero.cta}</a>
             </Button>
           </motion.div>
         </div>

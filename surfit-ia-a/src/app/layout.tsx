@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Bebas_Neue, Inter } from "next/font/google"
 import "./globals.css"
+import { LanguageProvider } from "@/contexts/language-context"
 
 const headingFont = Bebas_Neue({
   subsets: ["latin"],
@@ -35,7 +36,7 @@ export default function RootLayout({
       className={`${headingFont.variable} ${bodyFont.variable} dark h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-body bg-[#0A0F1C] text-white">
-        {children}
+        <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>
   )

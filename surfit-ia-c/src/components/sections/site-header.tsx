@@ -4,18 +4,20 @@ import { useState, useEffect, useRef } from "react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { Menu, ExternalLink, Globe } from "lucide-react"
-
-const navItems = [
-  { label: "AI Coach", href: "#ai-coach" },
-  { label: "Spots", href: "#spots" },
-  { label: "Shop", href: "#features" },
-  { label: "Adventures", href: "#adventures" },
-]
+import { useLanguage } from "@/contexts/language-context"
 
 export default function SiteHeader() {
   const [activeSection, setActiveSection] = useState("")
   const [hidden, setHidden] = useState(false)
   const lastScrollY = useRef(0)
+  const { t, lang, toggle } = useLanguage()
+
+  const navItems = [
+    { label: t.nav.aiCoach, href: "#ai-coach" },
+    { label: t.nav.spots, href: "#spots" },
+    { label: t.nav.shop, href: "#features" },
+    { label: t.nav.adventures, href: "#adventures" },
+  ]
 
   useEffect(() => {
     const handleScroll = () => {
@@ -55,11 +57,11 @@ export default function SiteHeader() {
             const isActive =
               (item.href === "#ai-coach" && activeSection === "ai-coach") ||
               (item.href === "#spots" && activeSection === "spots") ||
-              (item.href === "#features" && (activeSection === "features")) ||
+              (item.href === "#features" && activeSection === "features") ||
               (item.href === "#adventures" && activeSection === "adventures")
             return (
               <a
-                key={item.href}
+                key={item.href + item.label}
                 href={item.href}
                 className={`rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-200 focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-950 ${
                   isActive
@@ -75,18 +77,19 @@ export default function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <span
-            className="flex items-center text-teal-300 px-2 text-sm"
-            aria-label="Language: English"
+          <button
+            onClick={toggle}
+            className="flex items-center text-teal-300 hover:text-cyan-400 px-2 py-1 text-sm transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-950"
+            aria-label={`Switch to ${lang === "en" ? "Spanish" : "English"}`}
           >
             <Globe className="h-4 w-4 mr-1" />
-            EN
-          </span>
+            {lang === "en" ? "EN" : "ES"}
+          </button>
+
           <Button
             variant="ghost"
             size="sm"
             className="text-rose-500 hover:text-rose-400 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-950"
-           
           >
             <a
               href="https://www.windy.com"
@@ -117,7 +120,7 @@ export default function SiteHeader() {
               <nav className="flex flex-col gap-6 mt-12" aria-label="Mobile navigation">
                 {navItems.map((item) => (
                   <a
-                    key={item.href}
+                    key={item.href + item.label}
                     href={item.href}
                     className="text-3xl font-bold text-white uppercase tracking-tight hover:text-cyan-400 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-950"
                     style={{ fontFamily: "Outfit, sans-serif" }}
@@ -125,6 +128,15 @@ export default function SiteHeader() {
                     {item.label}
                   </a>
                 ))}
+                <button
+                  onClick={toggle}
+                  className="text-lg text-teal-300 hover:text-cyan-400 flex items-center gap-2 transition-colors duration-200 text-left"
+                  style={{ fontFamily: "DM Sans, sans-serif" }}
+                  aria-label={`Switch to ${lang === "en" ? "Spanish" : "English"}`}
+                >
+                  <Globe className="h-4 w-4" />
+                  {lang === "en" ? "EN → ES" : "ES → EN"}
+                </button>
                 <a
                   href="https://www.windy.com"
                   target="_blank"

@@ -1,12 +1,14 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
 import { ChevronDown } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 const ease: [number, number, number, number] = [0.25, 0.1, 0.25, 1]
 
 export default function Hero() {
+  const { t } = useLanguage()
+
   return (
     <section
       aria-label="Hero"
@@ -29,7 +31,7 @@ export default function Hero() {
           className="text-xs font-semibold uppercase tracking-[0.15em] text-indigo-400 mb-6"
           style={{ fontFamily: "Inter, sans-serif" }}
         >
-          AI-Powered Surf Coaching
+          {t.hero.eyebrow}
         </motion.p>
 
         <motion.h1
@@ -49,7 +51,7 @@ export default function Hero() {
           className="text-lg md:text-xl text-slate-400 max-w-xl mx-auto mb-8"
           style={{ fontFamily: "Inter, sans-serif" }}
         >
-          Master the science of surfing with artificial intelligence
+          {t.hero.subheading}
         </motion.p>
 
         <motion.div
@@ -58,19 +60,11 @@ export default function Hero() {
           transition={{ duration: 0.6, delay: 0.6, ease }}
           className="flex flex-col items-center gap-4"
         >
-          {/* TODO: Replace href with actual app dashboard URL */}
-          <Button
-            asChild
-            className="bg-indigo-500 hover:bg-indigo-400 text-white px-8 py-3 rounded-lg text-sm font-semibold transition-all duration-150 ease-out hover:shadow-[0_0_20px_rgba(99,102,241,0.2)] hover:scale-[1.02] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-          >
-            <a href="#TODO-dashboard-url">Enter Dashboard</a>
-          </Button>
-
           <a
             href="#spots"
             className="text-sm text-slate-500 hover:text-slate-300 transition-colors duration-150 flex items-center gap-1"
           >
-            Explore Top 10 Spots
+            {t.hero.cta}
             <ChevronDown className="h-4 w-4" />
           </a>
         </motion.div>

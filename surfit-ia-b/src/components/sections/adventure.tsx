@@ -4,7 +4,7 @@ import { useRef } from "react"
 import { motion, useInView } from "framer-motion"
 import { Card } from "@/components/ui/card"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
-import { Play, ArrowRight } from "lucide-react"
+import { Play } from "lucide-react"
 
 const ease: [number, number, number, number] = [0.25, 0.1, 0.25, 1]
 
@@ -94,14 +94,7 @@ export default function Adventure() {
           </ScrollArea>
 
           <div className="mt-6">
-            {/* TODO: Replace with actual trips/adventures video URL */}
-            <a
-              href="#TODO-app-gallery"
-              className="text-sm font-medium text-indigo-400 hover:text-indigo-300 transition-colors duration-150 inline-flex items-center gap-1"
-            >
-              Watch Best Trips
-              <ArrowRight className="h-3.5 w-3.5" />
-            </a>
+            <p className="text-xs text-slate-500 uppercase tracking-widest">Full video library available in the app</p>
           </div>
         </motion.div>
       </div>

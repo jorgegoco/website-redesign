@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Outfit, DM_Sans } from "next/font/google"
 import "./globals.css"
+import { LanguageProvider } from "@/contexts/language-context"
 
 const headingFont = Outfit({
   subsets: ["latin"],
@@ -34,7 +35,7 @@ export default function RootLayout({
       className={`${headingFont.variable} ${bodyFont.variable} dark h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-body bg-[#042F2E] text-white">
-        {children}
+        <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>
   )

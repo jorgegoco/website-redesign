@@ -1,7 +1,6 @@
 "use client"
 
 import { motion, useReducedMotion } from "framer-motion"
-import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { Play, ExternalLink } from "lucide-react"
@@ -90,19 +89,7 @@ export default function Adventure() {
               ADVENTURE &amp; ADVICE
             </motion.h2>
           </div>
-          <motion.div {...fadeUp(0.2)}>
-            <Button
-              asChild
-              variant="outline"
-              className="rounded-full border-white/10 text-white hover:bg-white/10 px-6 py-5 text-sm uppercase tracking-[0.1em] transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-            >
-              {/* TODO: Replace with actual trips/adventures video URL */}
-              <a href="#TODO-app-gallery">
-                <Play className="mr-2 h-4 w-4" />
-                Watch Best Trips
-              </a>
-            </Button>
-          </motion.div>
+          <p className="text-xs text-gray-500 uppercase tracking-widest">Full video library available in the app</p>
         </div>
 
         {/* Trip cards horizontal scroll */}

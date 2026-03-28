@@ -2,9 +2,8 @@
 
 import { motion, useInView } from "framer-motion"
 import { useRef } from "react"
-import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Upload, Eye, Activity, Crosshair } from "lucide-react"
+import { Eye, Activity, Crosshair } from "lucide-react"
 
 const ease: [number, number, number, number] = [0.25, 0.1, 0.25, 1]
 
@@ -48,24 +47,12 @@ export default function AiCoach() {
                   rail work, and gaze — delivering instant biomechanical feedback to
                   improve your technique.
                 </p>
-                <div>
-                  {/* TODO: Replace href with actual AI coach upload URL (authenticated) */}
-                  <Button
-                    asChild
-                    className="bg-indigo-500 hover:bg-indigo-400 text-white rounded-lg text-sm font-semibold transition-all duration-150 ease-out hover:shadow-[0_0_20px_rgba(99,102,241,0.2)] hover:scale-[1.02] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-                  >
-                    <a href="#TODO-dashboard-url">
-                      <Upload className="mr-2 h-4 w-4" />
-                      Upload Surf Photo
-                    </a>
-                  </Button>
-                  <p
-                    className="text-xs text-slate-600 mt-2"
-                    style={{ fontFamily: "Inter, sans-serif" }}
-                  >
-                    Supports JPG, PNG up to 10MB
-                  </p>
-                </div>
+                <p
+                  className="text-xs text-slate-600 uppercase tracking-widest"
+                  style={{ fontFamily: "Inter, sans-serif" }}
+                >
+                  Coming soon — upload feature requires app account
+                </p>
               </div>
 
               <div className="bg-zinc-900 border-t lg:border-t-0 lg:border-l border-zinc-800 p-8 md:p-12 flex items-center justify-center min-h-[300px]">

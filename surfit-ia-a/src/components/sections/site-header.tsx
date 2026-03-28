@@ -4,18 +4,19 @@ import { useState, useEffect, useRef } from "react"
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { Waves, Menu, X } from "lucide-react"
-
-const navLinks = [
-  { label: "AI Coach", href: "#features" },
-  { label: "Spots", href: "#spots" },
-  { label: "Shop", href: "#features" },
-  { label: "Adventures", href: "#adventures" },
-]
+import { useLanguage } from "@/contexts/language-context"
 
 export default function SiteHeader() {
   const [scrolled, setScrolled] = useState(false)
   const [hidden, setHidden] = useState(false)
   const lastScrollY = useRef(0)
+  const { t, toggle } = useLanguage()
+
+  const navLinks = [
+    { label: t.nav.shop, href: "#features" },
+    { label: t.nav.spots, href: "#spots" },
+    { label: t.nav.adventures, href: "#adventures" },
+  ]
 
   useEffect(() => {
     const handleScroll = () => {
@@ -57,7 +58,7 @@ export default function SiteHeader() {
           <nav className="hidden md:flex items-center gap-8" aria-label="Main navigation">
             {navLinks.map((link) => (
               <a
-                key={link.label}
+                key={link.href + link.label}
                 href={link.href}
                 className="relative text-sm font-medium tracking-[0.05em] text-gray-400 transition-colors duration-200 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 group"
               >
@@ -68,6 +69,14 @@ export default function SiteHeader() {
           </nav>
 
           <div className="flex items-center gap-4">
+            <button
+              onClick={toggle}
+              className="hidden sm:flex items-center text-xs font-bold uppercase tracking-widest text-gray-400 transition-colors duration-200 hover:text-cyan-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 border border-white/10 rounded-full px-3 py-1"
+              aria-label={`Switch language to ${t.toggle}`}
+            >
+              {t.toggle === "ES" ? "EN" : "ES"}
+            </button>
+
             <a
               href="https://www.windy.com/?waves,30.392,-28.125,3"
               target="_blank"
@@ -113,7 +122,7 @@ export default function SiteHeader() {
                   </div>
                   <nav className="flex flex-col gap-1" aria-label="Mobile navigation">
                     {navLinks.map((link) => (
-                      <SheetClose key={link.label}>
+                      <SheetClose key={link.href + link.label}>
                         <a
                           href={link.href}
                           className="rounded-lg px-3 py-3 text-sm font-medium tracking-[0.05em] text-gray-400 transition-colors duration-200 hover:bg-white/5 hover:text-white"
@@ -132,6 +141,13 @@ export default function SiteHeader() {
                       <Waves className="h-4 w-4" />
                       Surf Forecast
                     </a>
+                    <button
+                      onClick={toggle}
+                      className="flex items-center gap-2 rounded-lg px-3 py-3 text-sm font-medium tracking-[0.05em] text-gray-400 transition-colors duration-200 hover:bg-white/5 hover:text-cyan-400 text-left"
+                      aria-label={`Switch language to ${t.toggle}`}
+                    >
+                      {t.toggle === "ES" ? "EN → ES" : "ES → EN"}
+                    </button>
                   </nav>
                 </div>
               </SheetContent>

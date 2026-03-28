@@ -4,19 +4,21 @@ import { useState, useEffect, useRef } from "react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { Menu, ExternalLink } from "lucide-react"
-
-const navLinks = [
-  { label: "AI Coach", href: "#ai-coach" },
-  { label: "Features", href: "#features" },
-  { label: "Spots", href: "#spots" },
-  { label: "Adventures", href: "#adventures" },
-]
+import { useLanguage } from "@/contexts/language-context"
 
 export default function SiteHeader() {
   const [scrolled, setScrolled] = useState(false)
   const [activeSection, setActiveSection] = useState("")
   const [sheetOpen, setSheetOpen] = useState(false)
   const observerRef = useRef<IntersectionObserver | null>(null)
+  const { t, lang, toggle } = useLanguage()
+
+  const navLinks = [
+    { label: t.nav.aiCoach, href: "#ai-coach" },
+    { label: t.nav.features, href: "#features" },
+    { label: t.nav.spots, href: "#spots" },
+    { label: t.nav.adventures, href: "#adventures" },
+  ]
 
   useEffect(() => {
     const handleScroll = () => {
@@ -93,16 +95,17 @@ export default function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <span
-            className="text-sm text-slate-400 px-3 py-1"
-            aria-label="Language: English"
+          <button
+            onClick={toggle}
+            className="text-sm font-semibold text-slate-400 hover:text-slate-50 transition-colors duration-150 border border-zinc-700 rounded px-2 py-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+            aria-label={`Switch to ${lang === "en" ? "Spanish" : "English"}`}
           >
-            EN
-          </span>
+            {lang === "en" ? "EN" : "ES"}
+          </button>
+
           <Button
             variant="ghost"
             className="text-sm text-slate-400 hover:text-slate-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-           
           >
             <a
               href="https://www.windy.com"
@@ -142,7 +145,13 @@ export default function SiteHeader() {
                   </a>
                 ))}
                 <div className="border-t border-zinc-800 pt-4 mt-4 flex flex-col gap-4">
-                  <span className="text-sm text-slate-400">English</span>
+                  <button
+                    onClick={toggle}
+                    className="text-sm text-slate-400 hover:text-slate-50 transition-colors duration-150 text-left"
+                    aria-label={`Switch to ${lang === "en" ? "Spanish" : "English"}`}
+                  >
+                    {lang === "en" ? "EN → ES" : "ES → EN"}
+                  </button>
                   <a
                     href="https://www.windy.com"
                     target="_blank"

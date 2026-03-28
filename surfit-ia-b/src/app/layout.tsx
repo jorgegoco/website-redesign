@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Space_Grotesk, Inter } from "next/font/google"
 import "./globals.css"
+import { LanguageProvider } from "@/contexts/language-context"
 
 const headingFont = Space_Grotesk({
   subsets: ["latin"],
@@ -34,7 +35,7 @@ export default function RootLayout({
       className={`${headingFont.variable} ${bodyFont.variable} dark h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-body bg-[#09090B] text-[#F8FAFC]">
-        {children}
+        <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>
   )

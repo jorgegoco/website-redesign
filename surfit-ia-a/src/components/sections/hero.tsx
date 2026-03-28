@@ -4,10 +4,12 @@ import { useRef } from "react"
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { ChevronDown } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function Hero() {
   const ref = useRef<HTMLDivElement>(null)
   const prefersReducedMotion = useReducedMotion()
+  const { t } = useLanguage()
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
@@ -28,6 +30,7 @@ export default function Hero() {
 
   return (
     <section
+      id="hero"
       ref={ref}
       className="relative h-dvh overflow-hidden"
       aria-label="Hero"
@@ -53,7 +56,7 @@ export default function Hero() {
             {...fadeUp(0.2)}
             className="mb-6 font-body text-xs md:text-sm font-medium uppercase tracking-[0.25em] text-cyan-500"
           >
-            AI-Powered Surf Coaching
+            {t.hero.eyebrow}
           </motion.p>
 
           <h1 className="mb-6 font-display text-[96px] md:text-[128px] lg:text-[160px] leading-[0.85] tracking-[0.02em] text-white">
@@ -82,8 +85,7 @@ export default function Hero() {
             {...fadeUp(0.6)}
             className="mx-auto mb-10 max-w-2xl font-body text-xl md:text-2xl font-light leading-relaxed text-gray-300"
           >
-            Master the science of surfing with artificial intelligence. AI surf
-            posture analysis &amp; correction.
+            {t.hero.subheading}
           </motion.p>
 
           <motion.div
@@ -95,13 +97,12 @@ export default function Hero() {
                 : { duration: 0.5, delay: 0.8, ease: [0, 0, 0.2, 1] as [number, number, number, number] }
             }
           >
-            {/* TODO: Replace href with the actual app dashboard URL */}
             <Button
               asChild
               size="lg"
               className="rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 px-10 md:px-12 py-6 md:py-7 text-sm md:text-base font-semibold uppercase tracking-[0.1em] text-white shadow-[0_0_50px_rgba(6,182,212,0.25)] transition-all duration-300 hover:shadow-[0_0_70px_rgba(6,182,212,0.35)] hover:scale-105 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
             >
-              <a href="#TODO-dashboard-url">Enter Dashboard</a>
+              <a href="#features">{t.hero.cta}</a>
             </Button>
           </motion.div>
         </div>

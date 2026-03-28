@@ -110,13 +110,7 @@ export default function FeaturesGrid() {
                   >
                     Browse curated surf photography from the world&apos;s best breaks.
                   </p>
-                  {/* TODO: Replace with actual gallery URL */}
-                  <Button
-                    asChild
-                    className="bg-gradient-to-r from-cyan-400 to-rose-500 text-teal-950 font-bold rounded-full px-6 py-3 hover:shadow-[0_0_40px_rgba(34,211,238,0.4)] hover:scale-105 transition-all duration-200 focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-950"
-                  >
-                    <a href="#TODO-app-gallery">View Gallery</a>
-                  </Button>
+                  <p className="text-xs text-teal-400/60 uppercase tracking-widest">Gallery available in the app</p>
                 </TabsContent>
                 <TabsContent value="videos" className="mt-0" role="tabpanel">
                   <h3
@@ -131,13 +125,7 @@ export default function FeaturesGrid() {
                   >
                     Watch the best surf highlights and trick breakdowns.
                   </p>
-                  {/* TODO: Replace with actual video highlights URL */}
-                  <Button
-                    asChild
-                    className="bg-gradient-to-r from-cyan-400 to-rose-500 text-teal-950 font-bold rounded-full px-6 py-3 hover:shadow-[0_0_40px_rgba(34,211,238,0.4)] hover:scale-105 transition-all duration-200 focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-950"
-                  >
-                    <a href="#TODO-app-gallery">Watch Highlights</a>
-                  </Button>
+                  <p className="text-xs text-teal-400/60 uppercase tracking-widest">Videos available in the app</p>
                 </TabsContent>
               </Tabs>
             </Card>
@@ -159,15 +147,7 @@ export default function FeaturesGrid() {
               >
                 Discover the 10 best surf shops online. Best prices, premium boards, and wetsuits in Europe & World.
               </p>
-              {/* TODO: Replace with actual surf shop list URL */}
-              <Button
-                asChild
-                variant="outline"
-                className="border-2 border-rose-500 text-rose-500 rounded-full px-6 py-2 font-bold uppercase text-sm hover:bg-rose-500/10 hover:text-white hover:border-white transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-950"
-                style={{ fontFamily: "Outfit, sans-serif" }}
-              >
-                <a href="#TODO-store-list">OPEN STORE LIST</a>
-              </Button>
+              <p className="text-xs text-teal-400/60 uppercase tracking-widest">Shop list coming soon</p>
             </Card>
           </motion.div>
 

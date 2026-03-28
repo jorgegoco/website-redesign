@@ -81,24 +81,10 @@ export default function FeaturesGrid() {
                   </TabsTrigger>
                 </TabsList>
                 <TabsContent value="images" className="mt-3">
-                  {/* TODO: Replace with actual gallery URL */}
-                  <a
-                    href="#TODO-app-gallery"
-                    className="text-sm font-medium text-indigo-400 hover:text-indigo-300 transition-colors duration-150 inline-flex items-center gap-1"
-                  >
-                    View Gallery
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </a>
+                  <p className="text-xs text-slate-500 uppercase tracking-widest">Gallery available in the app</p>
                 </TabsContent>
                 <TabsContent value="videos" className="mt-3">
-                  {/* TODO: Replace with actual video highlights URL */}
-                  <a
-                    href="#TODO-app-gallery"
-                    className="text-sm font-medium text-indigo-400 hover:text-indigo-300 transition-colors duration-150 inline-flex items-center gap-1"
-                  >
-                    Watch Highlights
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </a>
+                  <p className="text-xs text-slate-500 uppercase tracking-widest">Videos available in the app</p>
                 </TabsContent>
               </Tabs>
             </Card>
@@ -122,14 +108,7 @@ export default function FeaturesGrid() {
               >
                 Discover the 10 best surf shops online. Best prices, premium boards, and wetsuits in Europe & World.
               </p>
-              {/* TODO: Replace with actual surf shop list URL */}
-              <a
-                href="#TODO-store-list"
-                className="mt-auto pt-4 text-sm font-medium text-indigo-400 hover:text-indigo-300 transition-colors duration-150 inline-flex items-center gap-1"
-              >
-                Open Store List
-                <ArrowRight className="h-3.5 w-3.5" />
-              </a>
+              <p className="mt-auto pt-4 text-xs text-slate-500 uppercase tracking-widest">Shop list coming soon</p>
             </Card>
           </motion.div>
 
