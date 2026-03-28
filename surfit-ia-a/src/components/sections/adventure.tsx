@@ -17,7 +17,7 @@ const trips: Trip[] = [
     title: "Bali Dream Session",
     location: "Uluwatu, Indonesia",
     thumbnail:
-      "https://images.unsplash.com/photo-1502680390548-bdbac40c7e54?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1518837695005-2083093ee35b?q=80&w=800&auto=format&fit=crop",
   },
   {
     title: "Nazare Giants",
@@ -29,7 +29,7 @@ const trips: Trip[] = [
     title: "Pipeline Masters",
     location: "Oahu, Hawaii",
     thumbnail:
-      "https://images.unsplash.com/photo-1455729552457-5c322b382249?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1559827260-dc66d52bef19?q=80&w=800&auto=format&fit=crop",
   },
   {
     title: "Mentawai Perfection",
@@ -67,7 +67,7 @@ export default function Adventure() {
       {/* Background image with heavy overlay */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <img
-          src="https://images.unsplash.com/photo-1512100356132-d324c38c7941?q=80&w=2670&auto=format&fit=crop"
+          src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?q=80&w=2670&auto=format&fit=crop"
           alt=""
           className="h-full w-full object-cover opacity-[0.08]"
         />
@@ -142,7 +142,9 @@ export default function Adventure() {
         {/* Bottom link */}
         <motion.div {...fadeUp(0.3)} className="mt-8 text-center">
           <a
-            href="#"
+            href="https://www.youtube.com"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 font-body text-xs font-medium uppercase tracking-widest text-gray-400 transition-colors duration-200 hover:text-cyan-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
             aria-label="YouTube Curated List (opens in new tab)"
           >

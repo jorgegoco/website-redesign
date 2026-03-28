@@ -115,7 +115,7 @@ export default function SiteHeader() {
           </a>
 
           <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-            <SheetTrigger>
+            <SheetTrigger asChild>
               <Button
                 variant="ghost"
                 size="icon"

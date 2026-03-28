@@ -89,7 +89,7 @@ export default function SiteHeader() {
             </a>
 
             <Sheet>
-              <SheetTrigger>
+              <SheetTrigger asChild>
                 <Button
                   variant="ghost"
                   size="icon"

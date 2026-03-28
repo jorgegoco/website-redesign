@@ -15,11 +15,11 @@ interface VideoCard {
 
 const videos: VideoCard[] = [
   { title: "Pipeline Masters Highlights", thumbnail: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?q=80&w=600&auto=format&fit=crop" },
-  { title: "Teahupo'o Heavy Water", thumbnail: "https://images.unsplash.com/photo-1512100356132-d324c38c7941?q=80&w=600&auto=format&fit=crop" },
+  { title: "Teahupo'o Heavy Water", thumbnail: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?q=80&w=600&auto=format&fit=crop" },
   { title: "Bali Surf Adventure", thumbnail: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?q=80&w=600&auto=format&fit=crop" },
-  { title: "Big Wave Mavericks", thumbnail: "https://images.unsplash.com/photo-1512100356132-d324c38c7941?q=80&w=600&auto=format&fit=crop" },
+  { title: "Big Wave Mavericks", thumbnail: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?q=80&w=600&auto=format&fit=crop" },
   { title: "Nazare Giant Swells", thumbnail: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?q=80&w=600&auto=format&fit=crop" },
-  { title: "Hossegor Beach Break Barrels", thumbnail: "https://images.unsplash.com/photo-1512100356132-d324c38c7941?q=80&w=600&auto=format&fit=crop" },
+  { title: "Hossegor Beach Break Barrels", thumbnail: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?q=80&w=600&auto=format&fit=crop" },
 ]
 
 const sectionHeading = {
@@ -59,7 +59,7 @@ export default function Adventure() {
     >
       <motion.div style={{ y: backgroundY }} className="absolute inset-0">
         <img
-          src="https://images.unsplash.com/photo-1512100356132-d324c38c7941?q=80&w=2670&auto=format&fit=crop"
+          src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?q=80&w=2670&auto=format&fit=crop"
           alt="Background Wave"
           className="w-full h-full object-cover"
         />
