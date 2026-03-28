@@ -16,3 +16,6 @@ Thumbs.db
 
 # Debug
 npm-debug.log*
+
+# Temporary documentation (local only)
+docs/
