@@ -90,6 +90,10 @@ Combine both inputs. Key principles:
 - **Differentiate layouts, not just colors** — when producing multiple directions, ensure each
   one has a distinct layout structure for at least 3 sections. Color and font changes alone do
   not make a direction different. Ask: what does direction B do structurally that A doesn't?
+  The easiest and highest-impact differentiator is **section order** — at least one direction
+  must reorder sections relative to the others (e.g., Spots before Features, or AI Coach before
+  Hero scroll). Always fill in the "Section Assembly Order" table in each spec and compare
+  across directions before handing off to the component generator.
 - **Declare the language strategy** — always resolve language inconsistencies explicitly in the
   spec. Never leave this ambiguous for the component generator to decide.
 
@@ -174,6 +178,23 @@ Document the image approach for this direction before generating components.
 
 When generating multiple directions: each direction MUST use a different hero image.
 Document the chosen src/prompt per direction here so the component generator has no ambiguity.
+
+---
+
+## Section Assembly Order
+
+Define the exact `page.tsx` render order for this direction. At least one direction must differ
+from the others in section order — reordering is the single highest-impact structural differentiator.
+
+| Position | Component | Section ID | Notes |
+|----------|-----------|------------|-------|
+| 1 | `<Hero />` | `#hero` | Always first |
+| 2 | `<{Section} />` | `#{id}` | {rationale for placement} |
+| ... | | | |
+
+**Rule:** If two directions share the same section order, document the explicit structural
+differentiator that makes each section's internal layout distinct (e.g., grid vs list vs scroll).
+Identical section order + identical internal layouts across two directions is a quality failure.
 
 ---
 

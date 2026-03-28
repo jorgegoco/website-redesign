@@ -231,6 +231,8 @@ Every generated component MUST satisfy ALL of these:
 - [ ] Language consistency — all text matches the page's declared `lang` attribute
 - [ ] Language toggle (if present) is functional — has `useState` + conditional rendering
 - [ ] Image sources are distinct from other design directions (no shared `<img src>` across A/B/C)
+- [ ] Section assembly order matches the design spec's "Section Assembly Order" table — if the spec doesn't have one, raise it before generating `page.tsx`
+- [ ] At least one direction has a different section order from the others (e.g., SurfSpots before FeaturesGrid in direction C vs A/B)
 
 ---
 
