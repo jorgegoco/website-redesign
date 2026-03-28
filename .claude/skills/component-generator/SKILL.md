@@ -193,6 +193,21 @@ the link or leave the button without an href.
 These must either link to real pages or be **removed entirely**. Do not leave them as `href="#"`.
 If the original site has no privacy policy, remove the footer link.
 
+**shadcn/ui Button + anchor pattern:**
+When a `<Button>` must navigate, the `<a>` goes *inside* the Button using `asChild`:
+```tsx
+// ✅ Correct
+<Button asChild className="...">
+  <a href="https://..." target="_blank" rel="noopener noreferrer">Label</a>
+</Button>
+
+// ❌ Wrong — <a> outside <Button> loses Button styling
+<a href="..."><Button>Label</Button></a>
+
+// ❌ Wrong — <a> inside <Button> without asChild = nested interactives + hydration error
+<Button><a href="...">Label</a></Button>
+```
+
 ### Language Consistency
 
 1. Check `meta[lang]` (or the page's declared primary language) from the analysis report.
@@ -227,10 +242,12 @@ Every generated component MUST satisfy ALL of these:
 - [ ] Hover/focus states on all interactive elements
 - [ ] Minimum 16px body text (never smaller on mobile)
 - [ ] No `href="#"` — every link has a real target, `#section-id`, or `#TODO-replace` with comment
-- [ ] No button without action — every `<Button>` is wrapped in `<a>` or has an `onClick` handler
+- [ ] No navigational `<Button>` without `asChild` — when a Button links somewhere, use `<Button asChild><a href="...">text</a></Button>`; never nest `<a>` inside `<Button>` without `asChild`, and never nest `<Button>` inside `<a>` — both produce invalid HTML
+- [ ] `<SheetTrigger asChild>` — always pass `asChild` to SheetTrigger; omitting it creates a `<button>` inside `<button>` and causes a React hydration error
 - [ ] Language consistency — all text matches the page's declared `lang` attribute
 - [ ] Language toggle (if present) is functional — has `useState` + conditional rendering
 - [ ] Image sources are distinct from other design directions (no shared `<img src>` across A/B/C)
+- [ ] Unsplash photo IDs are verified working — if an ID cannot be confirmed (e.g., no prior screenshot evidence), prefer photo IDs already confirmed in this project or use the original site's images instead
 - [ ] Section assembly order matches the design spec's "Section Assembly Order" table — if the spec doesn't have one, raise it before generating `page.tsx`
 - [ ] At least one direction has a different section order from the others (e.g., SurfSpots before FeaturesGrid in direction C vs A/B)
 
