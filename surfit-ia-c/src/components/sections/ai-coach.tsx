@@ -15,10 +15,11 @@ const sectionHeading = {
   },
 }
 
-const clipReveal = {
-  hidden: { clipPath: "inset(100% 0 0 0)" },
+const cardReveal = {
+  hidden: { opacity: 0, y: 40 },
   visible: {
-    clipPath: "inset(0% 0 0 0)",
+    opacity: 1,
+    y: 0,
     transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] },
   },
 }
@@ -35,8 +36,8 @@ export default function AiCoach() {
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-20%" }}
-          variants={clipReveal}
+          viewport={{ once: true, amount: 0.05 }}
+          variants={cardReveal}
         >
           <Card className="bg-cyan-950 border border-white/5 border-l-4 border-l-cyan-400 rounded-2xl overflow-hidden">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
