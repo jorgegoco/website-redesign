@@ -73,12 +73,15 @@ export default function FeaturesGrid() {
                   </p>
                 </div>
                 <div className="mt-6">
+                  {/* TODO: Replace href with actual AI coach upload URL (authenticated) */}
                   <Button
+                    asChild
                     className="rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 px-6 py-5 text-sm font-semibold uppercase tracking-[0.1em] text-white shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300 hover:shadow-[0_0_50px_rgba(6,182,212,0.25)] hover:scale-105 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-                    aria-label="Upload Surf Photo"
                   >
-                    Upload Surf Photo
-                    <ArrowRight className="ml-2 h-4 w-4" />
+                    <a href="#TODO-dashboard-url">
+                      Upload Surf Photo
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </a>
                   </Button>
                 </div>
               </div>
@@ -122,11 +125,12 @@ export default function FeaturesGrid() {
                     Browse stunning surf photography from around the world.
                   </p>
                   <Button
+                    asChild
                     variant="outline"
                     className="w-full rounded-full border-white/10 text-white hover:bg-white/10 text-sm uppercase tracking-[0.1em] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-                    aria-label="View Gallery"
                   >
-                    View Gallery
+                    {/* TODO: Replace with actual gallery URL */}
+                    <a href="#TODO-app-gallery">View Gallery</a>
                   </Button>
                 </TabsContent>
                 <TabsContent value="videos" className="flex-1 flex flex-col justify-between">
@@ -134,11 +138,12 @@ export default function FeaturesGrid() {
                     Watch curated surf highlights and session videos.
                   </p>
                   <Button
+                    asChild
                     variant="outline"
                     className="w-full rounded-full border-white/10 text-white hover:bg-white/10 text-sm uppercase tracking-[0.1em] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-                    aria-label="Watch Highlights"
                   >
-                    Watch Highlights
+                    {/* TODO: Replace with actual video gallery URL */}
+                    <a href="#TODO-app-gallery">Watch Highlights</a>
                   </Button>
                 </TabsContent>
               </Tabs>
@@ -162,12 +167,15 @@ export default function FeaturesGrid() {
                   </p>
                 </div>
                 <Button
+                  asChild
                   variant="ghost"
                   className="mt-4 w-full justify-start px-0 text-cyan-400 hover:bg-white/5 text-sm uppercase tracking-[0.1em] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-                  aria-label="Open Store List"
                 >
-                  Open Store List
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  {/* TODO: Replace with actual surf shop list URL */}
+                  <a href="#TODO-store-list">
+                    Open Store List
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </a>
                 </Button>
               </div>
             </Card>
@@ -190,12 +198,14 @@ export default function FeaturesGrid() {
                   </p>
                 </div>
                 <Button
+                  asChild
                   variant="ghost"
                   className="mt-4 w-full justify-start px-0 text-cyan-400 hover:bg-white/5 text-sm uppercase tracking-[0.1em] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-                  aria-label="Book Trip"
                 >
-                  Book Trip
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <a href="https://www.google.com/travel" target="_blank" rel="noopener noreferrer">
+                    Book Trip
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </a>
                 </Button>
               </div>
             </Card>
@@ -218,12 +228,14 @@ export default function FeaturesGrid() {
                   </p>
                 </div>
                 <Button
+                  asChild
                   variant="ghost"
                   className="mt-4 w-full justify-start px-0 text-cyan-400 hover:bg-white/5 text-sm uppercase tracking-[0.1em] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-                  aria-label="View Spots"
                 >
-                  View Spots
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <a href="#spots">
+                    View Spots
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </a>
                 </Button>
               </div>
             </Card>

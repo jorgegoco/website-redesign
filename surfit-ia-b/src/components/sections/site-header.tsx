@@ -93,13 +93,12 @@ export default function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            className="text-sm text-slate-400 hover:text-slate-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-            aria-label="Toggle language"
+          <span
+            className="text-sm text-slate-400 px-3 py-1"
+            aria-label="Language: English"
           >
             EN
-          </Button>
+          </span>
           <Button
             variant="ghost"
             className="text-sm text-slate-400 hover:text-slate-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
@@ -143,12 +142,7 @@ export default function SiteHeader() {
                   </a>
                 ))}
                 <div className="border-t border-zinc-800 pt-4 mt-4 flex flex-col gap-4">
-                  <button
-                    className="text-sm text-slate-400 hover:text-slate-300 text-left"
-                    aria-label="Toggle language"
-                  >
-                    English
-                  </button>
+                  <span className="text-sm text-slate-400">English</span>
                   <a
                     href="https://www.windy.com"
                     target="_blank"

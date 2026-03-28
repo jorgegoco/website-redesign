@@ -94,8 +94,9 @@ export default function Adventure() {
           </ScrollArea>
 
           <div className="mt-6">
+            {/* TODO: Replace with actual trips/adventures video URL */}
             <a
-              href="#"
+              href="#TODO-app-gallery"
               className="text-sm font-medium text-indigo-400 hover:text-indigo-300 transition-colors duration-150 inline-flex items-center gap-1"
             >
               Watch Best Trips

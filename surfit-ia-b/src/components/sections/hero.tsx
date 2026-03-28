@@ -58,13 +58,12 @@ export default function Hero() {
           transition={{ duration: 0.6, delay: 0.6, ease }}
           className="flex flex-col items-center gap-4"
         >
+          {/* TODO: Replace href with actual app dashboard URL */}
           <Button
+            asChild
             className="bg-indigo-500 hover:bg-indigo-400 text-white px-8 py-3 rounded-lg text-sm font-semibold transition-all duration-150 ease-out hover:shadow-[0_0_20px_rgba(99,102,241,0.2)] hover:scale-[1.02] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-           
           >
-            <a href="#" lang="es">
-              Entrar al Dashboard
-            </a>
+            <a href="#TODO-dashboard-url">Enter Dashboard</a>
           </Button>
 
           <a

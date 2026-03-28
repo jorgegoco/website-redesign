@@ -66,12 +66,15 @@ export default function AiCoach() {
                     Upload your surf photo and get instant AI feedback on stance, rail work, and gaze direction. Powered by computer vision trained on professional surfers.
                   </p>
                   <div>
+                    {/* TODO: Replace href with actual AI coach upload URL (authenticated) */}
                     <Button
+                      asChild
                       className="bg-gradient-to-r from-cyan-400 to-rose-500 text-teal-950 font-bold rounded-full px-8 py-4 text-lg hover:shadow-[0_0_50px_rgba(34,211,238,0.5)] hover:scale-105 hover:-translate-y-0.5 transition-all duration-200 focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-950"
-                      aria-label="Upload Surf Photo"
                     >
-                      <Upload className="h-5 w-5 mr-2" />
-                      Upload Surf Photo
+                      <a href="#TODO-dashboard-url">
+                        <Upload className="h-5 w-5 mr-2" />
+                        Upload Surf Photo
+                      </a>
                     </Button>
                   </div>
                 </motion.div>

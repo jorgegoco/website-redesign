@@ -49,12 +49,15 @@ export default function AiCoach() {
                   improve your technique.
                 </p>
                 <div>
+                  {/* TODO: Replace href with actual AI coach upload URL (authenticated) */}
                   <Button
+                    asChild
                     className="bg-indigo-500 hover:bg-indigo-400 text-white rounded-lg text-sm font-semibold transition-all duration-150 ease-out hover:shadow-[0_0_20px_rgba(99,102,241,0.2)] hover:scale-[1.02] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-                    aria-label="Upload Surf Photo for AI analysis"
                   >
-                    <Upload className="mr-2 h-4 w-4" />
-                    Upload Surf Photo
+                    <a href="#TODO-dashboard-url">
+                      <Upload className="mr-2 h-4 w-4" />
+                      Upload Surf Photo
+                    </a>
                   </Button>
                   <p
                     className="text-xs text-slate-600 mt-2"

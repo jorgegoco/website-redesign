@@ -188,11 +188,11 @@ export default function SurfSpots() {
           </div>
           <motion.div {...fadeUp(0.2)}>
             <Button
+              asChild
               variant="ghost"
               className="text-gray-400 hover:text-white hover:bg-white/5 text-sm uppercase tracking-[0.1em] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-              aria-label="View All spots"
             >
-              View All
+              <a href="#spots">View All</a>
             </Button>
           </motion.div>
         </div>

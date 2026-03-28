@@ -47,7 +47,7 @@ export default function SiteHeader() {
         role="banner"
       >
         <div className="mx-auto flex h-16 md:h-20 max-w-7xl items-center justify-between px-4">
-          <a href="#" className="flex items-center gap-2" aria-label="SURFIT.IA home">
+          <a href="#hero" className="flex items-center gap-2" aria-label="SURFIT.IA home">
             <Waves className="h-5 w-5 text-cyan-500" />
             <span className="font-display text-2xl text-white tracking-[0.02em]">
               SURFIT.IA

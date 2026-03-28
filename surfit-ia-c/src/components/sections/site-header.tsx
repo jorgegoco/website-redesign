@@ -43,7 +43,7 @@ export default function SiteHeader() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
         <a
-          href="#"
+          href="#hero"
           className="font-black text-2xl text-cyan-400 tracking-tighter uppercase"
           style={{ fontFamily: "Outfit, sans-serif" }}
         >
@@ -75,15 +75,13 @@ export default function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-teal-300 hover:text-white transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-950"
-            aria-label="Toggle language"
+          <span
+            className="flex items-center text-teal-300 px-2 text-sm"
+            aria-label="Language: English"
           >
             <Globe className="h-4 w-4 mr-1" />
-            <span className="text-sm">EN</span>
-          </Button>
+            EN
+          </span>
           <Button
             variant="ghost"
             size="sm"

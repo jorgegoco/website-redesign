@@ -21,7 +21,8 @@ const externalLinks = [
     label: "Surf Forecast",
     href: "https://www.windy.com/?waves,30.392,-28.125,3",
   },
-  { label: "YouTube", href: "#" },
+  // TODO: Replace with real YouTube channel URL when available
+  // { label: "YouTube", href: "https://www.youtube.com/@surfit-ia" },
 ]
 
 export default function SiteFooter() {
@@ -113,18 +114,9 @@ export default function SiteFooter() {
             &copy; 2026 SURFIT.IA. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
-            <a
-              href="#"
-              className="font-body text-xs text-gray-600 transition-colors duration-200 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-            >
-              Privacy
-            </a>
-            <a
-              href="#"
-              className="font-body text-xs text-gray-600 transition-colors duration-200 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-            >
-              Terms
-            </a>
+            {/* TODO: Link to real Privacy Policy and Terms pages when available */}
+            <span className="font-body text-xs text-gray-600">Privacy</span>
+            <span className="font-body text-xs text-gray-600">Terms</span>
           </div>
         </div>
       </div>

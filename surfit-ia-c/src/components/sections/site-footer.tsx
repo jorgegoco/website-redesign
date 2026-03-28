@@ -165,25 +165,10 @@ export default function SiteFooter() {
           >
             2026 SURFIT.IA
           </p>
+          {/* TODO: Link to real Privacy Policy and Terms pages when available */}
           <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-             
-              className="p-0 h-auto text-teal-300 hover:text-cyan-400 transition-colors duration-200 font-normal text-sm focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-950"
-            >
-              <a href="#" style={{ fontFamily: "DM Sans, sans-serif" }}>
-                Privacy
-              </a>
-            </Button>
-            <Button
-              variant="ghost"
-             
-              className="p-0 h-auto text-teal-300 hover:text-cyan-400 transition-colors duration-200 font-normal text-sm focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-950"
-            >
-              <a href="#" style={{ fontFamily: "DM Sans, sans-serif" }}>
-                Terms
-              </a>
-            </Button>
+            <span className="text-sm text-teal-300" style={{ fontFamily: "DM Sans, sans-serif" }}>Privacy</span>
+            <span className="text-sm text-teal-300" style={{ fontFamily: "DM Sans, sans-serif" }}>Terms</span>
           </div>
           <p
             className="text-xs text-teal-500"

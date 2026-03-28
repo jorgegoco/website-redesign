@@ -81,8 +81,9 @@ export default function FeaturesGrid() {
                   </TabsTrigger>
                 </TabsList>
                 <TabsContent value="images" className="mt-3">
+                  {/* TODO: Replace with actual gallery URL */}
                   <a
-                    href="#"
+                    href="#TODO-app-gallery"
                     className="text-sm font-medium text-indigo-400 hover:text-indigo-300 transition-colors duration-150 inline-flex items-center gap-1"
                   >
                     View Gallery
@@ -90,8 +91,9 @@ export default function FeaturesGrid() {
                   </a>
                 </TabsContent>
                 <TabsContent value="videos" className="mt-3">
+                  {/* TODO: Replace with actual video highlights URL */}
                   <a
-                    href="#"
+                    href="#TODO-app-gallery"
                     className="text-sm font-medium text-indigo-400 hover:text-indigo-300 transition-colors duration-150 inline-flex items-center gap-1"
                   >
                     Watch Highlights
@@ -120,8 +122,9 @@ export default function FeaturesGrid() {
               >
                 Discover the 10 best surf shops online. Best prices, premium boards, and wetsuits in Europe & World.
               </p>
+              {/* TODO: Replace with actual surf shop list URL */}
               <a
-                href="#"
+                href="#TODO-store-list"
                 className="mt-auto pt-4 text-sm font-medium text-indigo-400 hover:text-indigo-300 transition-colors duration-150 inline-flex items-center gap-1"
               >
                 Open Store List
@@ -179,7 +182,7 @@ export default function FeaturesGrid() {
                 Explore panoramic photos and the best locations where surfing happens globally.
               </p>
               <a
-                href="#"
+                href="#spots"
                 className="mt-auto pt-4 text-sm font-medium text-indigo-400 hover:text-indigo-300 transition-colors duration-150 inline-flex items-center gap-1"
               >
                 View Spots

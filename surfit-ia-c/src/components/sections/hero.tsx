@@ -122,18 +122,19 @@ export default function Hero() {
             transition={{ type: "spring", stiffness: 200, damping: 15, delay: 1.5 }}
             className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
           >
+            {/* TODO: Replace href with actual app dashboard URL */}
             <Button
+              asChild
               className="bg-gradient-to-r from-cyan-400 to-rose-500 text-teal-950 font-bold rounded-full px-8 py-4 text-lg hover:shadow-[0_0_50px_rgba(34,211,238,0.5)] hover:scale-105 hover:-translate-y-0.5 transition-all duration-200 focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-950"
-              aria-label="Entrar al Dashboard"
             >
-              <span lang="es">Entrar al Dashboard</span>
+              <a href="#TODO-dashboard-url">Enter Dashboard</a>
             </Button>
             <Button
+              asChild
               variant="outline"
               className="border-2 border-cyan-400 text-cyan-400 rounded-full px-8 py-4 text-lg bg-transparent hover:bg-cyan-400/10 hover:text-white hover:border-white transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-950"
-              aria-label="Explore Spots"
             >
-              Explore Spots
+              <a href="#spots">Explore Spots</a>
             </Button>
           </motion.div>
         </div>

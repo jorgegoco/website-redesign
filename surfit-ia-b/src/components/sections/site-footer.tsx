@@ -4,9 +4,9 @@ import { Separator } from "@/components/ui/separator"
 
 const productLinks = [
   { label: "AI Coach", href: "#ai-coach" },
-  { label: "Surf Shop", href: "#" },
-  { label: "Travel", href: "#" },
-  { label: "Spot Gallery", href: "#" },
+  { label: "Surf Shop", href: "#features" },
+  { label: "Travel", href: "#adventures" },
+  { label: "Spot Gallery", href: "#features" },
 ]
 
 const exploreLinks = [
@@ -24,10 +24,8 @@ const exploreLinks = [
   },
 ]
 
-const legalLinks = [
-  { label: "Privacy Policy", href: "#" },
-  { label: "Terms of Service", href: "#" },
-]
+// TODO: Add real Privacy Policy and Terms URLs when available
+const legalLinks: { label: string; href: string }[] = []
 
 export default function SiteFooter() {
   return (

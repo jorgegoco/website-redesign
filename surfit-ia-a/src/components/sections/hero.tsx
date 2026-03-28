@@ -82,8 +82,8 @@ export default function Hero() {
             {...fadeUp(0.6)}
             className="mx-auto mb-10 max-w-2xl font-body text-xl md:text-2xl font-light leading-relaxed text-gray-300"
           >
-            Domina la ciencia del surf con inteligencia artificial. AI Surf posture
-            check &amp; correction.
+            Master the science of surfing with artificial intelligence. AI surf
+            posture analysis &amp; correction.
           </motion.p>
 
           <motion.div
@@ -95,12 +95,13 @@ export default function Hero() {
                 : { duration: 0.5, delay: 0.8, ease: [0, 0, 0.2, 1] as [number, number, number, number] }
             }
           >
+            {/* TODO: Replace href with the actual app dashboard URL */}
             <Button
+              asChild
               size="lg"
               className="rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 px-10 md:px-12 py-6 md:py-7 text-sm md:text-base font-semibold uppercase tracking-[0.1em] text-white shadow-[0_0_50px_rgba(6,182,212,0.25)] transition-all duration-300 hover:shadow-[0_0_70px_rgba(6,182,212,0.35)] hover:scale-105 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-              aria-label="Entrar al Dashboard"
             >
-              Entrar al Dashboard
+              <a href="#TODO-dashboard-url">Enter Dashboard</a>
             </Button>
           </motion.div>
         </div>

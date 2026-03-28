@@ -92,12 +92,15 @@ export default function Adventure() {
           </div>
           <motion.div {...fadeUp(0.2)}>
             <Button
+              asChild
               variant="outline"
               className="rounded-full border-white/10 text-white hover:bg-white/10 px-6 py-5 text-sm uppercase tracking-[0.1em] transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-              aria-label="Watch Best Trips"
             >
-              <Play className="mr-2 h-4 w-4" />
-              Watch Best Trips
+              {/* TODO: Replace with actual trips/adventures video URL */}
+              <a href="#TODO-app-gallery">
+                <Play className="mr-2 h-4 w-4" />
+                Watch Best Trips
+              </a>
             </Button>
           </motion.div>
         </div>
