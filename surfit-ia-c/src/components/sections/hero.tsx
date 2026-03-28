@@ -65,7 +65,7 @@ export default function Hero() {
         className="absolute inset-0"
       >
         <img
-          src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?q=80&w=2670&auto=format&fit=crop"
+          src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?q=80&w=2670&auto=format&fit=crop"
           alt="Deep Ocean"
           className="w-full h-full object-cover opacity-10"
         />

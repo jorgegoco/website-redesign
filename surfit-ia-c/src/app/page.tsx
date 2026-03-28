@@ -12,10 +12,10 @@ export default function Home() {
       <SiteHeader />
       <main>
         <Hero />
+        <SurfSpots />
         <AiCoach />
         <FeaturesGrid />
         <Adventure />
-        <SurfSpots />
       </main>
       <SiteFooter />
     </>
