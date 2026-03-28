@@ -144,6 +144,56 @@ broken layouts) — these are valuable redesign signals.
 
 2. Also use `mcp__chrome-devtools__take_snapshot` for a clean text-only dump of the page.
 
+### 3a. Language & Content Mismatch Detection (required)
+
+After the main extraction, run this additional check to detect language inconsistencies.
+Record the results explicitly in the report — downstream skills depend on this:
+
+```javascript
+(() => {
+  const pageLang = document.documentElement.lang || 'not-declared';
+  const spanishPatterns = /[áéíóúüñ¿¡]/i;
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const mixedNodes = [];
+  let node;
+  while ((node = walker.nextNode()) && mixedNodes.length < 20) {
+    const text = node.textContent.trim();
+    if (text.length > 10 && spanishPatterns.test(text)) {
+      mixedNodes.push(text.slice(0, 120));
+    }
+  }
+  return { pageLang, mixedLanguageTextFound: mixedNodes.length > 0, examples: mixedNodes.slice(0, 5) };
+})()
+```
+
+Record the output in the report under "Language Notes" (see report template below).
+
+### 3b. Authenticated Resource Link Detection (required)
+
+Identify any links that point to authenticated resources — these must be preserved verbatim
+in the redesign output. Run:
+
+```javascript
+(() => {
+  const authPatterns = ['/app', '/dashboard', '/login', '/signup', '/register', '/account', '/portal'];
+  const allLinks = [...document.querySelectorAll('a[href]')];
+  const authLinks = allLinks.filter(a => {
+    const href = a.getAttribute('href') || '';
+    return authPatterns.some(p => href.includes(p)) || (href.startsWith('http') && !href.includes(window.location.hostname));
+  }).map(a => ({
+    text: a.textContent.trim().slice(0, 80),
+    href: a.getAttribute('href'),
+    isExternal: a.getAttribute('href').startsWith('http'),
+    isCTA: ['button', 'btn', 'cta'].some(c => a.className.includes(c)) || a.closest('button') !== null
+  }));
+  return { authenticatedLinks: authLinks };
+})()
+```
+
+Record all results in the "Authenticated Resource Links" section of the report (see template).
+If no authenticated links are found, explicitly state "None found — this appears to be a
+purely informational/marketing site."
+
 ---
 
 ## Phase 4: Structure & Components
@@ -225,6 +275,14 @@ screenshot file paths in the Responsive Behavior section.
 - Navigation structure (primary, secondary, footer)
 - Information architecture
 
+### Authenticated Resource Links
+Links pointing to app/dashboard/login resources that must be preserved in the redesign:
+| CTA Text | URL | Location | Type |
+|----------|-----|----------|------|
+| (e.g., "Entrar al Dashboard") | (e.g., https://app.domain.com) | Hero CTA | Authenticated app |
+
+If none: "None found — informational/marketing site only."
+
 ## 2. Visual Design System
 ### Colors
 - Color palette with hex/RGB values
@@ -270,6 +328,13 @@ screenshot file paths in the Responsive Behavior section.
 - Inconsistent design tokens
 - Performance observations
 - Mobile responsiveness problems
+
+### Language Notes
+- **Page language declaration:** `lang="{value}"` (or "not declared")
+- **Detected content language:** {language(s) found}
+- **Mismatch detected:** {Yes / No}
+- **Mixed-language examples:** {list up to 5 text snippets that differ from page lang}
+- **Recommendation:** {Translate all to page lang | Add functional toggle | Keep as-is with justification}
 ```
 
 ---

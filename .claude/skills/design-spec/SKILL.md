@@ -87,6 +87,11 @@ Combine both inputs. Key principles:
   inconsistency flagged in the analyzer report.
 - **shadcn/ui first** — always check if shadcn/ui has a component before designing custom.
   Map every interactive element to a specific shadcn/ui component.
+- **Differentiate layouts, not just colors** — when producing multiple directions, ensure each
+  one has a distinct layout structure for at least 3 sections. Color and font changes alone do
+  not make a direction different. Ask: what does direction B do structurally that A doesn't?
+- **Declare the language strategy** — always resolve language inconsistencies explicitly in the
+  spec. Never leave this ambiguous for the component generator to decide.
 
 ### 5. Write the Design Spec
 
@@ -98,6 +103,77 @@ from the analyzer report, not from a generic checklist.
 
 **Direction:** {Chosen direction name} — {1-2 sentence summary of the vibe and rationale,
 referencing what's being preserved from the original and what's being modernized.}
+
+---
+
+## Language Strategy
+
+Resolve this before writing any other spec section — it affects CTAs, nav labels, and toggle UI.
+
+- **Page language:** `lang="{value}"` (from analyzer report)
+- **Content mismatch:** {Yes — describe / No}
+- **Decision:** {English only | Spanish only | Bilingual with functional toggle}
+- **Toggle implementation:** {`useState<'en'|'es'>` with conditional text rendering | None}
+- **CTAs to translate/resolve:**
+  | Original text | Language | Decision |
+  |--------------|----------|---------|
+  | "Entrar al Dashboard" | es | Translate to "Enter Dashboard" (en) OR keep es with functional toggle |
+
+If the original site has mixed language content, you MUST pick one of these and document it:
+1. **English only** — translate all non-English text, add TODO comments for any CTA translations
+2. **Original language only** — use the original language throughout, update `lang` attribute
+3. **Bilingual toggle** — implement a functional `useState` language switcher (adds complexity)
+
+---
+
+## Navigation Map
+
+Define every section ID and every external link. The component generator uses this table to
+wire up all navigation and CTA links — nothing should be left as `#`.
+
+### Section Anchors
+| Section ID | Display Name | Component File | In Nav? | In Footer? |
+|-----------|-------------|----------------|---------|-----------|
+| `#hero` | Hero | `hero.tsx` | No | No |
+| `#features` | {section name} | `features-grid.tsx` | Yes | Yes |
+| {add all sections} | | | | |
+
+### External Links to Preserve
+| Link Text | URL | Location | Type |
+|-----------|-----|----------|------|
+| "Enter Dashboard" | {url-from-analyzer or "#TODO-dashboard-url"} | Hero CTA, Header | Authenticated app |
+| "Surf Forecast" | https://www.windy.com | Nav, Footer | External tool |
+| {all external links} | | | |
+
+If any authenticated resource URL was not captured by the analyzer (e.g., dashboard URL is
+unknown), use `#TODO-dashboard-url` and flag it explicitly here so the component generator
+uses the correct placeholder instead of `href="#"`.
+
+---
+
+## Asset Strategy
+
+Document the image approach for this direction before generating components.
+
+- **Image source:** {Preserve originals | Unsplash — distinct IDs per direction | AI-generated}
+- **Hero image:** {src URL or description/prompt}
+- **Section images:** {list per section that uses images}
+- **Placeholder policy:** {Use Unsplash fallback | Use placeholder.svg | Leave empty}
+
+**Image sourcing options (for reference):**
+
+| Option | Cost | How |
+|--------|------|-----|
+| Extract from original | Free | URLs from analyzer's image inventory |
+| Unsplash (manual) | Free | `https://images.unsplash.com/photo-{id}?w=1600` |
+| Unsplash API | Free | `https://api.unsplash.com/search/photos?query={keyword}` (API key needed) |
+| Pexels API | Free | `https://api.pexels.com/v1/search?query={keyword}` (API key needed) |
+| DALL-E 3 | Paid | Via Claude API — request if user opts in |
+| Midjourney | Paid | Provide prompt for user to run |
+| Stable Diffusion | Free (local) | Provide prompt for user to run |
+
+When generating multiple directions: each direction MUST use a different hero image.
+Document the chosen src/prompt per direction here so the component generator has no ambiguity.
 
 ---
 

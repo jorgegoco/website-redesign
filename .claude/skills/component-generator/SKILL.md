@@ -141,6 +141,72 @@ export default function SectionName() {
 
 ---
 
+## Image Sourcing Strategy
+
+Before generating components, choose an image strategy. Document the choice in a comment at
+the top of each component that uses images.
+
+**Option 1 — Preserve originals (default):**
+Copy `<img src>` URLs directly from the analysis report's image inventory. Fastest approach;
+guaranteed to match brand identity. Use this unless the user requests otherwise.
+
+**Option 2 — Unsplash (distinct per direction):**
+Use `https://images.unsplash.com/photo-{id}?w=1600&auto=format&fit=crop`. The analyzer
+captures multiple images from the original site — use **different photo IDs per direction**.
+Never use the same Unsplash URL in two different design directions.
+
+**Option 3 — AI-generated (user opt-in only):**
+If the user explicitly requests AI-generated images, provide Midjourney or Stable Diffusion
+prompts as comments in the component. Do not call external APIs automatically.
+
+**Option 4 — Pexels API (keyword-driven):**
+`https://api.pexels.com/v1/search?query={keyword}` — requires a free API key from pexels.com.
+Good for finding thematic photos when the original site has no suitable images.
+
+**Rule:** Each design direction MUST use visually distinct imagery. Identical `<img src>` values
+across directions A, B, and C are a quality failure.
+
+---
+
+## Link & Language Rules
+
+These rules exist because generated components have historically produced dead links and
+language-inconsistent content. Follow them without exception.
+
+### Link Integrity
+
+Every `<a>` element MUST have a non-empty `href` that is one of:
+- A real URL (`https://...`)
+- A valid section anchor (`#features`, `#spots`, `#ai-coach`, etc.)
+- A documented placeholder: `href="#TODO-replace"` with an inline comment explaining the target
+
+**Never emit `href="#"` alone.** This is a silent dead link that passes visual review but
+breaks navigation. When the real URL is unknown, use `href="#TODO-dashboard-url"` (or similar)
+and add a `{/* TODO: Replace with actual URL */}` comment immediately above.
+
+**Authenticated resource links (dashboard, login, app):**
+If the analysis report flags a CTA as pointing to an authenticated resource, preserve the URL
+exactly. If the URL was not captured, use `href="#TODO-dashboard-url"` — never silently omit
+the link or leave the button without an href.
+
+**Footer legal links (Privacy Policy, Terms of Service):**
+These must either link to real pages or be **removed entirely**. Do not leave them as `href="#"`.
+If the original site has no privacy policy, remove the footer link.
+
+### Language Consistency
+
+1. Check `meta[lang]` (or the page's declared primary language) from the analysis report.
+2. All user-visible text must be in that language — no mixing.
+3. If the original site has a language mismatch (e.g., `lang="en"` page but Spanish CTAs):
+   - Default to the declared language (English if `lang="en"`)
+   - Add a comment: `{/* TODO: Original CTA was "Entrar al Dashboard" — translate as needed */}`
+   - Do NOT silently keep the mismatched language
+4. If a language toggle UI element is included in the design spec, it MUST be functional.
+   Minimum implementation: `useState<'en'|'es'>('en')` with conditional rendering of two text
+   sets. Never add a toggle button that has no `onClick` handler.
+
+---
+
 ## Quality Checklist
 
 Every generated component MUST satisfy ALL of these:
@@ -160,6 +226,11 @@ Every generated component MUST satisfy ALL of these:
 - [ ] Gradients match spec gradient definitions exactly
 - [ ] Hover/focus states on all interactive elements
 - [ ] Minimum 16px body text (never smaller on mobile)
+- [ ] No `href="#"` — every link has a real target, `#section-id`, or `#TODO-replace` with comment
+- [ ] No button without action — every `<Button>` is wrapped in `<a>` or has an `onClick` handler
+- [ ] Language consistency — all text matches the page's declared `lang` attribute
+- [ ] Language toggle (if present) is functional — has `useState` + conditional rendering
+- [ ] Image sources are distinct from other design directions (no shared `<img src>` across A/B/C)
 
 ---
 
@@ -324,3 +395,27 @@ The patterns above are **starting points**. Always adapt them to match the desig
   on cards and CTAs.
 
 Read the design spec's Motion & Interaction section carefully — it has the exact values.
+
+---
+
+## Direction Differentiation Requirements
+
+When generating components for multiple design directions (A, B, C) for the same site, each
+direction MUST differ in at least **two of the following five dimensions** beyond color palette:
+
+| Dimension | What to vary |
+|-----------|-------------|
+| **Section order** | Direction B might lead with AI Coach before a standard hero; C might open with a full-bleed video/image grid |
+| **Layout pattern per section** | A = bento grid for features; B = horizontal data table layout; C = card carousel |
+| **Typography scale emphasis** | A = large display headers (96–160px), minimal body; B = medium headers with dense data body; C = mid-size headers with oversized stat callouts |
+| **Content focus** | A = emotional/aspirational copy; B = functional/technical copy ("Upload → Analyze → Improve"); C = action/sport energy copy ("Ride. Compete. Dominate.") |
+| **CTA tone** | A = aspirational ("Discover your wave"); B = functional ("Start analysis"); C = energetic ("Go surf it") |
+
+**Rule:** If you find that directions A, B, and C share the same section layout for more than
+2 sections, stop and revisit the design spec. Ask: does the spec actually define structural
+differences, or only aesthetic (color/font) ones? If the spec is under-differentiated, apply
+the dimension table above to force meaningful layout variation before generating.
+
+**Image rule (repeated for emphasis):** Never use the same `<img src>` value across two
+different directions. Pick a distinct representative image for each direction that matches
+its emotional tone.
