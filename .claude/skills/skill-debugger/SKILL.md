@@ -71,6 +71,14 @@ Capture screenshots at three breakpoints. Save to `{project_dir}/screenshots/`:
 Use `mcp__chrome-devtools__resize_page` then `mcp__chrome-devtools__take_screenshot` for each.
 Restore to desktop width when done. Present all three screenshots to the user.
 
+> **Animation warning:** Next.js projects using Framer Motion `whileInView` keep sections at
+> `opacity: 0` until scrolled into view. A `fullPage: true` screenshot captures the full DOM
+> without scrolling — animated sections appear invisible/dark. To capture all sections properly:
+> 1. Take a first screenshot (hero, above the fold) with `fullPage: false`
+> 2. Use `evaluate_script` to scroll: `() => window.scrollTo(0, N)` for each section
+> 3. Wait ~600ms after each scroll, then screenshot
+> Alternatively: take `fullPage: false` screenshots at each major scroll position.
+
 ### Step 4: Automated Checks
 
 Run each check via `mcp__chrome-devtools__evaluate_script`. Each script returns a JSON result.
@@ -102,22 +110,46 @@ Run each check via `mcp__chrome-devtools__evaluate_script`. Each script returns 
 
 #### Check B: Button/CTA Audit
 
+> **Important — React limitation:** React attaches event handlers to the document root via
+> its synthetic event system. This means `btn.onclick !== null` returns `true` for ALL buttons
+> in a React app, even those with no real action. The DOM script below will always return 0
+> issues on React apps. Use the **source code scan** below instead.
+
+**Runtime check (catches non-React dead buttons):**
 ```javascript
 (() => {
   const issues = [];
   const buttons = [...document.querySelectorAll('button, [role="button"]')];
   buttons.forEach(btn => {
     const text = btn.textContent.trim().slice(0, 60);
-    const hasClick = btn.onclick !== null;
     const isInsideLink = btn.closest('a') !== null;
     const isFormSubmit = btn.type === 'submit';
-    if (!hasClick && !isInsideLink && !isFormSubmit) {
-      issues.push({ severity: 'critical', element: 'button', text, issue: 'Button has no action (no onclick, not inside <a>, not submit)', fix: 'Wrap in <a href="...">, add onClick handler, or remove' });
+    const hasAriaExpanded = btn.hasAttribute('aria-expanded');
+    const hasDataAction = [...btn.attributes].some(a => a.name.startsWith('data-'));
+    if (!isInsideLink && !isFormSubmit && !hasAriaExpanded && !hasDataAction) {
+      issues.push({ severity: 'warning', element: 'button', text, issue: 'Button not inside <a> and not submit — may be a dead button in React (verify via source scan)', fix: 'Wrap in <a href="...">, verify onClick handler exists, or check source' });
     }
   });
-  return { check: 'cta-audit', count: buttons.length, issues };
+  return { check: 'cta-audit-runtime', count: buttons.length, issues };
 })()
 ```
+
+**Source code scan (required for React/Next.js projects — authoritative):**
+
+Use Grep to scan component TSX files for `<Button` elements that are NOT wrapped in `<a>`:
+
+```bash
+# Find Button elements — then manually verify each has a wrapping <a> or meaningful onClick
+grep -n "<Button" {project_dir}/src/**/*.tsx | grep -v "asChild"
+```
+
+For each `<Button` found, check the surrounding lines in the source file:
+- If the `<Button>` is NOT inside `<a href="...">` and has no `onClick` with navigation → **Critical: dead button**
+- If it has `onClick={() => someStateHandler()}` (e.g., toggle, modal) → **OK, not navigation**
+- If it has `onClick={() => window.location.href = ...}` or `router.push(...)` → **OK**
+- If it has no onClick at all → **Critical: dead button**
+
+This source scan is the authoritative check for React projects. Always run it.
 
 ---
 
