@@ -12,6 +12,7 @@ import {
   MapPin,
   ExternalLink,
 } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 const ease: [number, number, number, number] = [0.25, 0.1, 0.25, 1]
 
@@ -385,6 +386,7 @@ function SpotRow({ spot, index }: { spot: Spot; index: number }) {
 export default function SurfSpots() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: "-80px" })
+  const { t } = useLanguage()
 
   return (
     <section
@@ -404,19 +406,19 @@ export default function SurfSpots() {
             className="text-xs font-semibold uppercase tracking-[0.1em] text-indigo-400 mb-3"
             style={{ fontFamily: "Inter, sans-serif" }}
           >
-            Curated Data
+            {t.spots.label}
           </p>
           <h2
             className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-50 tracking-[-0.02em] mb-3"
             style={{ fontFamily: "Space Grotesk, sans-serif" }}
           >
-            Top 10 World Surf Spots
+            {t.spots.heading}
           </h2>
           <p
             className="text-base md:text-lg text-slate-400"
             style={{ fontFamily: "Inter, sans-serif" }}
           >
-            Ranked by elite wave hunters. Real conditions, real data.
+            {t.spots.subtitle}
           </p>
         </motion.div>
 

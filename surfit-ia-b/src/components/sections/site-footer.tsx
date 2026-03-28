@@ -1,6 +1,7 @@
 "use client"
 
 import { Separator } from "@/components/ui/separator"
+import { useLanguage } from "@/contexts/language-context"
 
 const productLinks = [
   { label: "AI Coach", href: "#ai-coach" },
@@ -28,6 +29,7 @@ const exploreLinks = [
 const legalLinks: { label: string; href: string }[] = []
 
 export default function SiteFooter() {
+  const { t } = useLanguage()
   return (
     <footer
       aria-label="Site footer"
@@ -46,7 +48,7 @@ export default function SiteFooter() {
               className="text-sm text-slate-500 mt-2"
               style={{ fontFamily: "Inter, sans-serif" }}
             >
-              AI-powered surf coaching and wave intelligence.
+              {t.footer.tagline}
             </p>
           </div>
 
@@ -55,7 +57,7 @@ export default function SiteFooter() {
               className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3"
               style={{ fontFamily: "Inter, sans-serif" }}
             >
-              Product
+              {t.footer.colProduct}
             </p>
             <ul className="space-y-2">
               {productLinks.map((link) => (
@@ -77,7 +79,7 @@ export default function SiteFooter() {
               className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3"
               style={{ fontFamily: "Inter, sans-serif" }}
             >
-              Explore
+              {t.footer.colExplore}
             </p>
             <ul className="space-y-2">
               {exploreLinks.map((link) => (
@@ -101,7 +103,7 @@ export default function SiteFooter() {
               className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3"
               style={{ fontFamily: "Inter, sans-serif" }}
             >
-              Legal
+              {t.footer.colLegal}
             </p>
             <ul className="space-y-2">
               {legalLinks.map((link) => (
@@ -126,7 +128,7 @@ export default function SiteFooter() {
             className="text-xs text-slate-600"
             style={{ fontFamily: "Inter, sans-serif" }}
           >
-            &copy; {new Date().getFullYear()} SURFIT.IA. All rights reserved.
+            &copy; {new Date().getFullYear()} SURFIT.IA. {t.footer.rights}.
           </p>
           <p
             className="text-xs text-slate-600"

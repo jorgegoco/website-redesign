@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import SpotCard from "./spot-card"
+import { useLanguage } from "@/contexts/language-context"
 
 interface Spot {
   rank: number
@@ -153,6 +154,7 @@ const spots: Spot[] = [
 
 export default function SurfSpots() {
   const prefersReducedMotion = useReducedMotion()
+  const { t } = useLanguage()
 
   const fadeUp = (delay: number) => ({
     initial: prefersReducedMotion ? {} : { opacity: 0, y: 40 },
@@ -177,13 +179,13 @@ export default function SurfSpots() {
               {...fadeUp(0)}
               className="mb-4 font-body text-xs md:text-sm font-medium uppercase tracking-[0.25em] text-cyan-500"
             >
-              Curated by Elite Wave Hunters
+              {t.spots.label}
             </motion.p>
             <motion.h2
               {...fadeUp(0.1)}
               className="font-display text-4xl md:text-5xl lg:text-6xl tracking-[0.02em] text-white"
             >
-              TOP 10 WORLD SURF SPOTS
+              {t.spots.heading}
             </motion.h2>
           </div>
           <motion.div {...fadeUp(0.2)}>

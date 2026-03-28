@@ -5,6 +5,7 @@ import { motion, useInView } from "framer-motion"
 import { Card } from "@/components/ui/card"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { Play } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 const ease: [number, number, number, number] = [0.25, 0.1, 0.25, 1]
 
@@ -27,6 +28,7 @@ const videos: Video[] = [
 export default function Adventure() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: "-80px" })
+  const { t } = useLanguage()
 
   return (
     <section
@@ -46,13 +48,13 @@ export default function Adventure() {
             className="text-xs font-semibold uppercase tracking-[0.1em] text-indigo-400 mb-3"
             style={{ fontFamily: "Inter, sans-serif" }}
           >
-            Best Trips & Videos
+            {t.adventure.label}
           </p>
           <h2
             className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-50 tracking-[-0.02em]"
             style={{ fontFamily: "Space Grotesk, sans-serif" }}
           >
-            Adventure & Advice
+            {t.adventure.heading}
           </h2>
         </motion.div>
 
@@ -94,7 +96,7 @@ export default function Adventure() {
           </ScrollArea>
 
           <div className="mt-6">
-            <p className="text-xs text-slate-500 uppercase tracking-widest">Full video library available in the app</p>
+            <p className="text-xs text-slate-500 uppercase tracking-widest">{t.adventure.videosSoon}</p>
           </div>
         </motion.div>
       </div>

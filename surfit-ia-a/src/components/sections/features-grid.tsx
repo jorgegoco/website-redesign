@@ -13,9 +13,11 @@ import {
   Globe,
   MapPin,
 } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function FeaturesGrid() {
   const prefersReducedMotion = useReducedMotion()
+  const { t } = useLanguage()
 
   const fadeUp = (delay: number) => ({
     initial: prefersReducedMotion ? {} : { opacity: 0, y: 30 },
@@ -39,13 +41,13 @@ export default function FeaturesGrid() {
             {...fadeUp(0)}
             className="mb-4 font-body text-xs md:text-sm font-medium uppercase tracking-[0.25em] text-cyan-500"
           >
-            Everything You Need
+            {t.features.label}
           </motion.p>
           <motion.h2
             {...fadeUp(0.1)}
             className="font-display text-4xl md:text-5xl lg:text-6xl tracking-[0.02em] text-white"
           >
-            YOUR SURF TOOLKIT
+            {t.features.heading}
           </motion.h2>
         </div>
 
@@ -61,19 +63,17 @@ export default function FeaturesGrid() {
                     <Upload className="h-5 w-5 text-white" />
                   </div>
                   <p className="mb-2 font-body text-xs font-medium uppercase tracking-[0.25em] text-cyan-500">
-                    AI Coach
+                    {t.aiCoach.label}
                   </p>
                   <h3 className="mb-3 font-display text-2xl md:text-3xl tracking-[0.01em] text-white">
-                    BIOMECHANICAL ANALYSIS
+                    {t.aiCoach.heading}
                   </h3>
                   <p className="max-w-lg font-body text-sm md:text-base leading-relaxed text-gray-400">
-                    Upload a photo to receive instant AI feedback on your stance, rail
-                    work, and gaze. AI Surf posture check &amp; correction powered by
-                    computer vision.
+                    {t.aiCoach.description}
                   </p>
                 </div>
                 <p className="mt-6 text-xs text-gray-500 uppercase tracking-widest">
-                  Coming soon — upload feature requires app account
+                  {t.aiCoach.comingSoon}
                 </p>
               </div>
               {/* Decorative wave SVG */}
@@ -101,27 +101,27 @@ export default function FeaturesGrid() {
                     className="flex-1 data-[state=active]:bg-white/10 data-[state=active]:text-white text-gray-400 text-sm"
                   >
                     <ImageIcon className="mr-1.5 h-3.5 w-3.5" />
-                    Surf Images
+                    {t.features.tabs.images}
                   </TabsTrigger>
                   <TabsTrigger
                     value="videos"
                     className="flex-1 data-[state=active]:bg-white/10 data-[state=active]:text-white text-gray-400 text-sm"
                   >
                     <Play className="mr-1.5 h-3.5 w-3.5" />
-                    Videos
+                    {t.features.tabs.videos}
                   </TabsTrigger>
                 </TabsList>
                 <TabsContent value="images" className="flex-1 flex flex-col justify-between">
                   <p className="mb-4 font-body text-sm leading-relaxed text-gray-400">
-                    Browse stunning surf photography from around the world.
+                    {t.features.imageDesc}
                   </p>
-                  <p className="text-xs text-gray-500 uppercase tracking-widest">Gallery available in the app</p>
+                  <p className="text-xs text-gray-500 uppercase tracking-widest">{t.features.galleryAvailable}</p>
                 </TabsContent>
                 <TabsContent value="videos" className="flex-1 flex flex-col justify-between">
                   <p className="mb-4 font-body text-sm leading-relaxed text-gray-400">
-                    Watch curated surf highlights and session videos.
+                    {t.features.videoDesc}
                   </p>
-                  <p className="text-xs text-gray-500 uppercase tracking-widest">Videos available in the app</p>
+                  <p className="text-xs text-gray-500 uppercase tracking-widest">{t.features.videosAvailable}</p>
                 </TabsContent>
               </Tabs>
             </Card>
@@ -136,13 +136,12 @@ export default function FeaturesGrid() {
                     <ShoppingBag className="h-4.5 w-4.5 text-orange-400" />
                   </div>
                   <h3 className="mb-2 font-display text-2xl tracking-[0.01em] text-white">
-                    SURF SHOP
+                    {t.features.surfShop.title}
                   </h3>
                   <p className="font-body text-sm leading-relaxed text-gray-400">
-                    Discover the 10 best surf shops online. Best prices, premium boards,
-                    and wetsuits in Europe &amp; World.
+                    {t.features.surfShop.description}
                   </p>
-                  <p className="mt-4 text-xs text-gray-500 uppercase tracking-widest">Shop list coming soon</p>
+                  <p className="mt-4 text-xs text-gray-500 uppercase tracking-widest">{t.features.shopSoon}</p>
                 </div>
               </div>
             </Card>
@@ -157,11 +156,10 @@ export default function FeaturesGrid() {
                     <Globe className="h-4.5 w-4.5 text-blue-400" />
                   </div>
                   <h3 className="mb-2 font-display text-2xl tracking-[0.01em] text-white">
-                    GOOGLE TRAVEL SURF
+                    {t.features.googleTravel.title}
                   </h3>
                   <p className="font-body text-sm leading-relaxed text-gray-400">
-                    Explore the best surf trips and prices to blue destinations worldwide
-                    via Google Travel.
+                    {t.features.googleTravel.description}
                   </p>
                 </div>
                 <Button
@@ -170,7 +168,7 @@ export default function FeaturesGrid() {
                   className="mt-4 w-full justify-start px-0 text-cyan-400 hover:bg-white/5 text-sm uppercase tracking-[0.1em] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
                 >
                   <a href="https://www.google.com/travel" target="_blank" rel="noopener noreferrer">
-                    Book Trip
+                    {t.features.googleTravel.cta}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </a>
                 </Button>
@@ -187,11 +185,10 @@ export default function FeaturesGrid() {
                     <MapPin className="h-4.5 w-4.5 text-green-400" />
                   </div>
                   <h3 className="mb-2 font-display text-2xl tracking-[0.01em] text-white">
-                    WORLD SPOT GALLERY
+                    {t.features.worldSpots.title}
                   </h3>
                   <p className="font-body text-sm leading-relaxed text-gray-400">
-                    Explore panoramic photos and the best locations where surfing happens
-                    globally.
+                    {t.features.worldSpots.description}
                   </p>
                 </div>
                 <Button
@@ -200,7 +197,7 @@ export default function FeaturesGrid() {
                   className="mt-4 w-full justify-start px-0 text-cyan-400 hover:bg-white/5 text-sm uppercase tracking-[0.1em] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
                 >
                   <a href="#spots">
-                    View Spots
+                    {t.features.worldSpots.cta}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </a>
                 </Button>

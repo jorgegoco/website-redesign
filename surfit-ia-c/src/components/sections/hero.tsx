@@ -46,9 +46,9 @@ function useTextScramble(text: string, duration: number = 800, charDelay: number
 }
 
 const statBadges = [
-  { icon: MapPin, label: "10 World Spots", color: "text-yellow-400", borderColor: "border-rose-500" },
-  { icon: Cpu, label: "AI Coach", color: "text-cyan-400", borderColor: "border-cyan-400" },
-  { icon: Radio, label: "Live Forecast", color: "text-yellow-400", borderColor: "border-rose-500" },
+  { icon: MapPin, label: "10 World Spots", color: "text-yellow-400", borderColor: "border-rose-500", href: "#spots" },
+  { icon: Cpu, label: "AI Coach", color: "text-cyan-400", borderColor: "border-cyan-400", href: "#ai-coach" },
+  { icon: Radio, label: "Live Forecast", color: "text-yellow-400", borderColor: "border-rose-500", href: "https://www.windy.com", external: true },
 ]
 
 export default function Hero() {
@@ -59,6 +59,7 @@ export default function Hero() {
 
   return (
     <section
+      id="hero"
       className="relative h-screen flex items-center overflow-hidden bg-gradient-to-br from-teal-950 via-cyan-950 to-teal-950"
       aria-label="Hero"
     >
@@ -135,12 +136,15 @@ export default function Hero() {
 
         <div className="hidden lg:flex flex-col gap-4 w-2/5 items-end">
           {statBadges.map((badge, i) => (
-            <motion.div
+            <motion.a
               key={badge.label}
+              href={badge.href}
+              target={badge.external ? "_blank" : undefined}
+              rel={badge.external ? "noopener noreferrer" : undefined}
               initial={{ opacity: 0, x: 100 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ type: "spring", stiffness: 200, damping: 15, delay: 1.6 + i * 0.1 }}
-              className={`bg-cyan-950 ${badge.borderColor} border rounded-xl px-5 py-3 flex items-center gap-3`}
+              className={`bg-cyan-950 ${badge.borderColor} border rounded-xl px-5 py-3 flex items-center gap-3 hover:brightness-110 transition-all duration-200`}
             >
               <badge.icon className={`h-5 w-5 ${badge.color}`} />
               <span
@@ -149,7 +153,7 @@ export default function Hero() {
               >
                 {badge.label}
               </span>
-            </motion.div>
+            </motion.a>
           ))}
         </div>
       </div>

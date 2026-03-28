@@ -4,12 +4,14 @@ import { motion, useInView } from "framer-motion"
 import { useRef } from "react"
 import { Card } from "@/components/ui/card"
 import { Eye, Activity, Crosshair } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 const ease: [number, number, number, number] = [0.25, 0.1, 0.25, 1]
 
 export default function AiCoach() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: "-80px" })
+  const { t } = useLanguage()
 
   return (
     <section
@@ -31,27 +33,25 @@ export default function AiCoach() {
                   className="text-xs font-semibold uppercase tracking-[0.1em] text-indigo-400 mb-4"
                   style={{ fontFamily: "Inter, sans-serif" }}
                 >
-                  Core Feature
+                  {t.aiCoach.label}
                 </p>
                 <h2
                   className="text-2xl md:text-3xl font-bold text-slate-50 tracking-[-0.02em] mb-4"
                   style={{ fontFamily: "Space Grotesk, sans-serif" }}
                 >
-                  AI Surf Coach
+                  {t.aiCoach.heading}
                 </h2>
                 <p
                   className="text-base text-slate-400 leading-relaxed mb-6"
                   style={{ fontFamily: "Inter, sans-serif" }}
                 >
-                  Upload a photo of your surf session. Our AI analyzes your stance,
-                  rail work, and gaze — delivering instant biomechanical feedback to
-                  improve your technique.
+                  {t.aiCoach.description}
                 </p>
                 <p
                   className="text-xs text-slate-600 uppercase tracking-widest"
                   style={{ fontFamily: "Inter, sans-serif" }}
                 >
-                  Coming soon — upload feature requires app account
+                  {t.aiCoach.comingSoon}
                 </p>
               </div>
 

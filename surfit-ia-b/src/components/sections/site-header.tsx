@@ -103,20 +103,16 @@ export default function SiteHeader() {
             {lang === "en" ? "EN" : "ES"}
           </button>
 
-          <Button
-            variant="ghost"
-            className="text-sm text-slate-400 hover:text-slate-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+          <a
+            href="https://www.windy.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:flex items-center gap-1 text-sm text-slate-400 hover:text-slate-300 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+            aria-label="Surf Forecast on Windy.com"
           >
-            <a
-              href="https://www.windy.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Surf Forecast on Windy.com"
-            >
-              Forecast
-              <ExternalLink className="ml-1 h-3.5 w-3.5" />
-            </a>
-          </Button>
+            Forecast
+            <ExternalLink className="h-3.5 w-3.5" />
+          </a>
 
           <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
             <SheetTrigger>

@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import { Card } from "@/components/ui/card"
 import { Camera } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 const sectionHeading = {
   hidden: { opacity: 0, y: 50, scale: 0.95 },
@@ -23,6 +24,7 @@ const clipReveal = {
 }
 
 export default function AiCoach() {
+  const { t } = useLanguage()
   return (
     <section
       id="ai-coach"
@@ -44,31 +46,31 @@ export default function AiCoach() {
                     className="text-xs md:text-sm font-bold uppercase tracking-[0.2em] text-yellow-400 mb-4"
                     style={{ fontFamily: "Outfit, sans-serif" }}
                   >
-                    HERO FEATURE
+                    {t.aiCoach.label}
                   </p>
                   <h2
                     className="text-3xl md:text-4xl lg:text-5xl font-bold uppercase tracking-tight text-white mb-2"
                     style={{ fontFamily: "Outfit, sans-serif" }}
                   >
-                    AI Surf Coach
+                    {t.aiCoach.heading}
                   </h2>
                   <h3
                     className="text-xl md:text-2xl font-semibold text-cyan-400 mb-6"
                     style={{ fontFamily: "Outfit, sans-serif" }}
                   >
-                    Biomechanical Analysis
+                    {t.aiCoach.subheading}
                   </h3>
                   <p
                     className="text-base md:text-lg text-teal-200 mb-8 max-w-xl leading-relaxed"
                     style={{ fontFamily: "DM Sans, sans-serif" }}
                   >
-                    Upload your surf photo and get instant AI feedback on stance, rail work, and gaze direction. Powered by computer vision trained on professional surfers.
+                    {t.aiCoach.description}
                   </p>
                   <p
                     className="text-xs text-teal-400/60 uppercase tracking-widest"
                     style={{ fontFamily: "DM Sans, sans-serif" }}
                   >
-                    Coming soon — upload feature requires app account
+                    {t.aiCoach.comingSoon}
                   </p>
                 </motion.div>
               </div>

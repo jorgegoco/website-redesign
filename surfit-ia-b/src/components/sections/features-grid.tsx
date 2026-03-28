@@ -5,6 +5,7 @@ import { motion, useInView } from "framer-motion"
 import { Card } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Play, Image, ShoppingBag, Plane, MapPin, ArrowRight } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 const ease: [number, number, number, number] = [0.25, 0.1, 0.25, 1]
 
@@ -27,6 +28,7 @@ const stagger = {
 export default function FeaturesGrid() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: "-80px" })
+  const { t } = useLanguage()
 
   return (
     <section
@@ -57,13 +59,13 @@ export default function FeaturesGrid() {
                 className="text-lg font-semibold text-slate-50 mt-4"
                 style={{ fontFamily: "Space Grotesk, sans-serif" }}
               >
-                Media Gallery
+                {t.features.mediaGallery}
               </h3>
               <p
                 className="text-sm text-slate-400 mt-2 mb-4"
                 style={{ fontFamily: "Inter, sans-serif" }}
               >
-                Browse surf images and watch curated video highlights from the best sessions worldwide.
+                {t.features.imageDesc}
               </p>
               <Tabs defaultValue="images" className="mt-4">
                 <TabsList className="bg-zinc-800 border border-zinc-700">
@@ -71,20 +73,20 @@ export default function FeaturesGrid() {
                     value="images"
                     className="text-sm data-[state=active]:text-indigo-400 data-[state=inactive]:text-slate-500"
                   >
-                    Surf Images
+                    {t.features.tabs.images}
                   </TabsTrigger>
                   <TabsTrigger
                     value="videos"
                     className="text-sm data-[state=active]:text-indigo-400 data-[state=inactive]:text-slate-500"
                   >
-                    Videos
+                    {t.features.tabs.videos}
                   </TabsTrigger>
                 </TabsList>
                 <TabsContent value="images" className="mt-3">
-                  <p className="text-xs text-slate-500 uppercase tracking-widest">Gallery available in the app</p>
+                  <p className="text-xs text-slate-500 uppercase tracking-widest">{t.features.galleryAvailable}</p>
                 </TabsContent>
                 <TabsContent value="videos" className="mt-3">
-                  <p className="text-xs text-slate-500 uppercase tracking-widest">Videos available in the app</p>
+                  <p className="text-xs text-slate-500 uppercase tracking-widest">{t.features.videosAvailable}</p>
                 </TabsContent>
               </Tabs>
             </Card>
@@ -100,15 +102,15 @@ export default function FeaturesGrid() {
                 className="text-lg font-semibold text-slate-50 mt-4"
                 style={{ fontFamily: "Space Grotesk, sans-serif" }}
               >
-                Surf Shop
+                {t.features.surfShop.title}
               </h3>
               <p
                 className="text-sm text-slate-400 mt-2"
                 style={{ fontFamily: "Inter, sans-serif" }}
               >
-                Discover the 10 best surf shops online. Best prices, premium boards, and wetsuits in Europe & World.
+                {t.features.surfShop.description}
               </p>
-              <p className="mt-auto pt-4 text-xs text-slate-500 uppercase tracking-widest">Shop list coming soon</p>
+              <p className="mt-auto pt-4 text-xs text-slate-500 uppercase tracking-widest">{t.features.shopSoon}</p>
             </Card>
           </motion.div>
 
@@ -122,13 +124,13 @@ export default function FeaturesGrid() {
                 className="text-lg font-semibold text-slate-50 mt-4"
                 style={{ fontFamily: "Space Grotesk, sans-serif" }}
               >
-                Google Travel Surf
+                {t.features.googleTravel.title}
               </h3>
               <p
                 className="text-sm text-slate-400 mt-2"
                 style={{ fontFamily: "Inter, sans-serif" }}
               >
-                Explore the best surf trips and prices to blue destinations worldwide via Google Travel.
+                {t.features.googleTravel.description}
               </p>
               <a
                 href="https://www.google.com/travel"
@@ -136,7 +138,7 @@ export default function FeaturesGrid() {
                 rel="noopener noreferrer"
                 className="mt-auto pt-4 text-sm font-medium text-indigo-400 hover:text-indigo-300 transition-colors duration-150 inline-flex items-center gap-1"
               >
-                Book Trip
+                {t.features.googleTravel.cta}
                 <ArrowRight className="h-3.5 w-3.5" />
               </a>
             </Card>
@@ -152,19 +154,19 @@ export default function FeaturesGrid() {
                 className="text-lg font-semibold text-slate-50 mt-4"
                 style={{ fontFamily: "Space Grotesk, sans-serif" }}
               >
-                World Spot Gallery
+                {t.features.worldSpots.title}
               </h3>
               <p
                 className="text-sm text-slate-400 mt-2"
                 style={{ fontFamily: "Inter, sans-serif" }}
               >
-                Explore panoramic photos and the best locations where surfing happens globally.
+                {t.features.worldSpots.description}
               </p>
               <a
                 href="#spots"
                 className="mt-auto pt-4 text-sm font-medium text-indigo-400 hover:text-indigo-300 transition-colors duration-150 inline-flex items-center gap-1"
               >
-                View Spots
+                {t.features.worldSpots.cta}
                 <ArrowRight className="h-3.5 w-3.5" />
               </a>
             </Card>

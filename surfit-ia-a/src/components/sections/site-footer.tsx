@@ -2,6 +2,7 @@
 
 import { Separator } from "@/components/ui/separator"
 import { Waves } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 const featureLinks = [
   { label: "AI Coach", href: "#features" },
@@ -26,6 +27,7 @@ const externalLinks = [
 ]
 
 export default function SiteFooter() {
+  const { t } = useLanguage()
   return (
     <footer
       id="footer"
@@ -41,15 +43,14 @@ export default function SiteFooter() {
               <span className="font-display text-xl text-white">SURFIT.IA</span>
             </div>
             <p className="font-body text-sm leading-relaxed text-gray-500">
-              AI-powered surf coaching. Analyze your technique, explore the
-              world&apos;s best waves, and plan your next adventure.
+              {t.footer.tagline}
             </p>
           </div>
 
           {/* Features column */}
           <div>
             <h4 className="mb-4 font-body text-xs font-medium uppercase tracking-[0.2em] text-gray-400">
-              Features
+              {t.footer.colFeatures}
             </h4>
             <ul className="space-y-2.5">
               {featureLinks.map((link) => (
@@ -68,7 +69,7 @@ export default function SiteFooter() {
           {/* Explore column */}
           <div>
             <h4 className="mb-4 font-body text-xs font-medium uppercase tracking-[0.2em] text-gray-400">
-              Explore
+              {t.footer.colExplore}
             </h4>
             <ul className="space-y-2.5">
               {exploreLinks.map((link) => (
@@ -87,7 +88,7 @@ export default function SiteFooter() {
           {/* External column */}
           <div>
             <h4 className="mb-4 font-body text-xs font-medium uppercase tracking-[0.2em] text-gray-400">
-              External
+              {t.footer.colExternal}
             </h4>
             <ul className="space-y-2.5">
               {externalLinks.map((link) => (
@@ -111,12 +112,11 @@ export default function SiteFooter() {
 
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="font-body text-xs text-gray-600">
-            &copy; 2026 SURFIT.IA. All rights reserved.
+            &copy; 2026 SURFIT.IA. {t.footer.rights}.
           </p>
           <div className="flex items-center gap-6">
-            {/* TODO: Link to real Privacy Policy and Terms pages when available */}
-            <span className="font-body text-xs text-gray-600">Privacy</span>
-            <span className="font-body text-xs text-gray-600">Terms</span>
+            <span className="font-body text-xs text-gray-600">{t.footer.privacy}</span>
+            <span className="font-body text-xs text-gray-600">{t.footer.terms}</span>
           </div>
         </div>
       </div>

@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from "framer-motion"
 import { Card } from "@/components/ui/card"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { Play, ExternalLink } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 interface Trip {
   title: string
@@ -46,6 +47,7 @@ const trips: Trip[] = [
 
 export default function Adventure() {
   const prefersReducedMotion = useReducedMotion()
+  const { t } = useLanguage()
 
   const fadeUp = (delay: number) => ({
     initial: prefersReducedMotion ? {} : { opacity: 0, y: 40 },
@@ -80,16 +82,16 @@ export default function Adventure() {
               {...fadeUp(0)}
               className="mb-4 font-body text-xs md:text-sm font-medium uppercase tracking-[0.25em] text-cyan-500"
             >
-              Best Trips &amp; Videos
+              {t.adventure.label}
             </motion.p>
             <motion.h2
               {...fadeUp(0.1)}
               className="font-display text-4xl md:text-5xl lg:text-6xl tracking-[0.02em] text-white"
             >
-              ADVENTURE &amp; ADVICE
+              {t.adventure.heading.toUpperCase()}
             </motion.h2>
           </div>
-          <p className="text-xs text-gray-500 uppercase tracking-widest">Full video library available in the app</p>
+          <p className="text-xs text-gray-500 uppercase tracking-widest">{t.adventure.videosSoon}</p>
         </div>
 
         {/* Trip cards horizontal scroll */}

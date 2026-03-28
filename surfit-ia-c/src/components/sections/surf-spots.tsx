@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import { useLanguage } from "@/contexts/language-context"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -222,6 +223,7 @@ const sectionHeading = {
 }
 
 export default function SurfSpots() {
+  const { t } = useLanguage()
   const [expanded, setExpanded] = useState<number | null>(null)
 
   const toggleExpand = (rank: number) => {
@@ -255,19 +257,19 @@ export default function SurfSpots() {
               className="text-xs md:text-sm font-bold uppercase tracking-[0.2em] text-yellow-400 mb-4"
               style={{ fontFamily: "Outfit, sans-serif" }}
             >
-              CURATED BY ELITE WAVE HUNTERS
+              {t.spots.label}
             </p>
             <h2
               className="text-3xl md:text-4xl lg:text-5xl font-bold uppercase tracking-tight text-white mb-2"
               style={{ fontFamily: "Outfit, sans-serif" }}
             >
-              Top 10 World Surf Spots
+              {t.spots.heading}
             </h2>
             <p
               className="text-lg md:text-xl text-teal-200"
               style={{ fontFamily: "DM Sans, sans-serif" }}
             >
-              The definitive ranking for serious surfers
+              {t.spots.subtitle}
             </p>
           </motion.div>
 

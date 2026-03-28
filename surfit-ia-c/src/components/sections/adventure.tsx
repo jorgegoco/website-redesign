@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { Play, ExternalLink } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 interface VideoCard {
   title: string
@@ -42,6 +43,7 @@ const cardFade = {
 
 export default function Adventure() {
   const sectionRef = useRef<HTMLElement>(null)
+  const { t } = useLanguage()
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
@@ -78,13 +80,13 @@ export default function Adventure() {
             className="text-xs md:text-sm font-bold uppercase tracking-[0.2em] text-cyan-400 mb-4"
             style={{ fontFamily: "Outfit, sans-serif" }}
           >
-            BEST TRIPS & VIDEOS
+            {t.adventure.label}
           </p>
           <h2
             className="text-3xl md:text-4xl lg:text-5xl font-bold uppercase tracking-tight text-white"
             style={{ fontFamily: "Outfit, sans-serif" }}
           >
-            Adventure & Advice
+            {t.adventure.heading.toUpperCase()}
           </h2>
         </motion.div>
 
@@ -136,18 +138,22 @@ export default function Adventure() {
           className="flex flex-col sm:flex-row gap-4 mt-8"
         >
           <Button
+            asChild
             className="bg-gradient-to-r from-cyan-400 to-rose-500 text-teal-950 font-bold rounded-full px-8 py-4 text-lg hover:shadow-[0_0_50px_rgba(34,211,238,0.5)] hover:scale-105 hover:-translate-y-0.5 transition-all duration-200 focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-950"
-            aria-label="Watch Best Trips"
           >
-            Watch Best Trips
+            <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer">
+              {t.adventure.watchTrips}
+            </a>
           </Button>
           <Button
+            asChild
             variant="outline"
             className="border-2 border-rose-500 text-rose-500 rounded-full px-8 py-4 text-lg bg-transparent hover:bg-rose-500/10 hover:text-white hover:border-white transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-950"
-            aria-label="YouTube Curated List"
           >
-            <ExternalLink className="h-4 w-4 mr-2" />
-            YouTube Curated List
+            <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer">
+              <ExternalLink className="h-4 w-4 mr-2" />
+              {t.adventure.youtubeCurated}
+            </a>
           </Button>
         </motion.div>
       </div>

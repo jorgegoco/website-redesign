@@ -1,8 +1,8 @@
 "use client"
 
 import { Separator } from "@/components/ui/separator"
-import { Button } from "@/components/ui/button"
 import { ExternalLink } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 const featureLinks = [
   { label: "AI Coach", href: "#ai-coach" },
@@ -24,6 +24,7 @@ const externalLinks = [
 ]
 
 export default function SiteFooter() {
+  const { t } = useLanguage()
   return (
     <footer
       className="bg-teal-950 border-t border-cyan-400/20 pt-16 pb-6"
@@ -43,7 +44,7 @@ export default function SiteFooter() {
               className="text-sm text-teal-300 leading-relaxed"
               style={{ fontFamily: "DM Sans, sans-serif" }}
             >
-              AI-powered surf coaching and wave guide
+              {t.footer.tagline}
             </p>
           </div>
 
@@ -53,24 +54,19 @@ export default function SiteFooter() {
               className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-400 mb-4"
               style={{ fontFamily: "Outfit, sans-serif" }}
             >
-              Features
+              {t.footer.colFeatures}
             </p>
             <nav aria-label="Feature links">
               <ul className="flex flex-col gap-2">
                 {featureLinks.map((link) => (
                   <li key={link.label}>
-                    <Button
-                      variant="ghost"
-                     
-                      className="p-0 h-auto text-teal-300 hover:text-cyan-400 transition-colors duration-200 font-normal text-sm justify-start focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-950"
+                    <a
+                      href={link.href}
+                      className="text-sm text-teal-300 hover:text-cyan-400 transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400"
+                      style={{ fontFamily: "DM Sans, sans-serif" }}
                     >
-                      <a
-                        href={link.href}
-                        style={{ fontFamily: "DM Sans, sans-serif" }}
-                      >
-                        {link.label}
-                      </a>
-                    </Button>
+                      {link.label}
+                    </a>
                   </li>
                 ))}
               </ul>
@@ -83,39 +79,29 @@ export default function SiteFooter() {
               className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-400 mb-4"
               style={{ fontFamily: "Outfit, sans-serif" }}
             >
-              Surf Spots
+              {t.footer.colSpots}
             </p>
             <nav aria-label="Top surf spot links">
               <ul className="flex flex-col gap-2">
                 {spotLinks.map((link) => (
                   <li key={link.label}>
-                    <Button
-                      variant="ghost"
-                     
-                      className="p-0 h-auto text-teal-300 hover:text-cyan-400 transition-colors duration-200 font-normal text-sm justify-start focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-950"
+                    <a
+                      href={link.href}
+                      className="text-sm text-teal-300 hover:text-cyan-400 transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400"
+                      style={{ fontFamily: "DM Sans, sans-serif" }}
                     >
-                      <a
-                        href={link.href}
-                        style={{ fontFamily: "DM Sans, sans-serif" }}
-                      >
-                        {link.label}
-                      </a>
-                    </Button>
+                      {link.label}
+                    </a>
                   </li>
                 ))}
                 <li>
-                  <Button
-                    variant="ghost"
-                   
-                    className="p-0 h-auto text-cyan-400 hover:text-white transition-colors duration-200 font-medium text-sm justify-start focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-950"
+                  <a
+                    href="#spots"
+                    className="text-sm font-medium text-cyan-400 hover:text-white transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400"
+                    style={{ fontFamily: "DM Sans, sans-serif" }}
                   >
-                    <a
-                      href="#spots"
-                      style={{ fontFamily: "DM Sans, sans-serif" }}
-                    >
-                      View All 10
-                    </a>
-                  </Button>
+                    {t.footer.viewAll}
+                  </a>
                 </li>
               </ul>
             </nav>
@@ -127,28 +113,23 @@ export default function SiteFooter() {
               className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-400 mb-4"
               style={{ fontFamily: "Outfit, sans-serif" }}
             >
-              External
+              {t.footer.colExternal}
             </p>
             <nav aria-label="External links">
               <ul className="flex flex-col gap-2">
                 {externalLinks.map((link) => (
                   <li key={link.label}>
-                    <Button
-                      variant="ghost"
-                     
-                      className="p-0 h-auto text-teal-300 hover:text-cyan-400 transition-colors duration-200 font-normal text-sm justify-start gap-1 focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-950"
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={link.ariaLabel}
+                      className="inline-flex items-center gap-1 text-sm text-teal-300 hover:text-cyan-400 transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400"
+                      style={{ fontFamily: "DM Sans, sans-serif" }}
                     >
-                      <a
-                        href={link.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={link.ariaLabel}
-                        style={{ fontFamily: "DM Sans, sans-serif" }}
-                      >
-                        {link.label}
-                        <ExternalLink className="h-3 w-3" />
-                      </a>
-                    </Button>
+                      {link.label}
+                      <ExternalLink className="h-3 w-3" />
+                    </a>
                   </li>
                 ))}
               </ul>
@@ -163,12 +144,11 @@ export default function SiteFooter() {
             className="text-sm text-teal-300"
             style={{ fontFamily: "DM Sans, sans-serif" }}
           >
-            2026 SURFIT.IA
+            {t.footer.rights}
           </p>
-          {/* TODO: Link to real Privacy Policy and Terms pages when available */}
           <div className="flex items-center gap-4">
-            <span className="text-sm text-teal-300" style={{ fontFamily: "DM Sans, sans-serif" }}>Privacy</span>
-            <span className="text-sm text-teal-300" style={{ fontFamily: "DM Sans, sans-serif" }}>Terms</span>
+            <span className="text-sm text-teal-300" style={{ fontFamily: "DM Sans, sans-serif" }}>{t.footer.privacy}</span>
+            <span className="text-sm text-teal-300" style={{ fontFamily: "DM Sans, sans-serif" }}>{t.footer.terms}</span>
           </div>
           <p
             className="text-xs text-teal-500"
