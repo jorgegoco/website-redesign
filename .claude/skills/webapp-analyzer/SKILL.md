@@ -1,5 +1,6 @@
 ---
 name: webapp-analyzer
+model: sonnet
 description: >
   Extract and analyze the full anatomy of a live webapp for redesign purposes — content, structure,
   visual design, components, navigation, responsiveness, and API surface. Use this skill whenever

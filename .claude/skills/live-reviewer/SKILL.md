@@ -1,5 +1,6 @@
 ---
 name: live-reviewer
+model: haiku
 description: >
   Preview a Next.js project in the browser via Chrome MCP, capture screenshots at desktop,
   tablet, and mobile breakpoints, and iterate based on user feedback. Triggers: "preview the

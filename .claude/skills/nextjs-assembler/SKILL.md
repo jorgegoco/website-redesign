@@ -1,5 +1,6 @@
 ---
 name: nextjs-assembler
+model: sonnet
 description: >
   Scaffold a Next.js + Tailwind + shadcn/ui project and assemble a complete landing page from
   generated components, a design spec, and content from an analyzer report. Handles project

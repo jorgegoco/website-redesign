@@ -1,5 +1,6 @@
 ---
 name: design-researcher
+model: sonnet
 description: >
   Research current landing page design trends for a specific industry using WebSearch.
   Returns a trend summary with trending patterns, multiple design direction options,

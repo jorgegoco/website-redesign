@@ -1,5 +1,6 @@
 ---
 name: skill-debugger
+model: sonnet
 description: >
   Audit any generated Next.js landing page output against a set of quality criteria — link
   integrity, language consistency, CTA functionality, image loading, and navigation completeness.

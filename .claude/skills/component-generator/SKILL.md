@@ -1,5 +1,6 @@
 ---
 name: component-generator
+model: sonnet
 description: >
   Generate professional React/Tailwind/shadcn-ui landing page components by writing code directly.
   Takes a design spec and content from an analyzer report, then produces one standalone .tsx file

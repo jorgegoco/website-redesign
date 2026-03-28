@@ -1,5 +1,6 @@
 ---
 name: webapp-redesign
+model: haiku
 description: >
   Orchestrate a complete landing page redesign from URL to deployable Next.js project. Chains
   6 skills in sequence: webapp-analyzer, design-researcher, design-spec, component-generator,

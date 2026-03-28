@@ -1,5 +1,6 @@
 ---
 name: design-spec
+model: opus
 description: >
   Create a complete design specification for a landing page redesign by combining an existing
   webapp analysis report with trend research. Produces a detailed spec covering color palette,
