@@ -19,3 +19,7 @@ npm-debug.log*
 
 # Temporary documentation (local only)
 docs/
+
+# Skill test outputs — local only, never track samples or redesign artifacts
+.redesign/
+surfit-ia-*/

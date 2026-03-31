@@ -6,42 +6,44 @@ Read this entire file before starting any task.
 
 ## Project Purpose
 
-This is a **personal reusable boilerplate** for redesigning client websites end-to-end. The goal is a polished, reliable workflow that goes from a live URL to a deployable Next.js landing page — repeatable across different clients and industries.
+This is a **personal reusable boilerplate** for redesigning client websites end-to-end. The goal
+is a polished, reliable workflow that goes from a live URL to a deployable Next.js landing page
+— repeatable across different clients and industries.
 
-### Entry points
+All client work (redesigned apps, analysis outputs, screenshots) lives **outside this repo**.
+This repo contains only the skill definitions and workflow machinery.
 
-- **`webapp-redesign` skill** — the orchestrator that chains all 6 skills in sequence. Start here when running a redesign.
-- **This file (CLAUDE.md)** — project context, rules, and constraints. Read before every session.
+### Entry point
 
-### Skill chain
+**`webapp-redesign` skill** — the orchestrator. Chain:
 
 ```
 webapp-analyzer → design-researcher → design-spec → component-generator → nextjs-assembler → live-reviewer
 ```
 
-Each skill has its own `SKILL.md` in `.claude/skills/{skill-name}/`. Skills are evaluated and improved individually.
-
-### Current audit material
-
-`surfit-ia-a/`, `surfit-ia-b/`, `surfit-ia-c/` — three built Next.js outputs representing design directions A, B, C for waveridersurf.com (generated via `.redesign/waveridersurf.com/v4/`). Use these to audit skill outputs and improve SKILL.md files one by one.
-
 ### Key directories
 
 | Path | Purpose |
 |---|---|
-| `.claude/skills/` | Skill definitions (SKILL.md files) |
-| `.redesign/` | Versioned artifacts per domain (analysis, spec, components, screenshots) |
-| `surfit-ia-{a,b,c}/` | Current reference outputs for skill auditing |
+| `.claude/skills/` | Skill definitions — the only source of truth for how each step works |
+| `.redesign/` | **Gitignored** — local-only folder for testing individual skills against a URL |
+
+### Testing a skill
+
+To test a single skill in isolation, run it against a URL and let the output land in `.redesign/`.
+That folder is gitignored and will never be committed. Do not move outputs into the repo root.
 
 ---
 
 ## Self-Correcting Rules Engine
 
-This file contains a growing ruleset that improves over time. **At session start, read the entire "Learned Rules" section before doing anything.**
+This file contains a growing ruleset that improves over time. **At session start, read the
+entire "Learned Rules" section before doing anything.**
 
 ### How it works
 
-1. When the user corrects you or you make a mistake, **immediately append a new rule** to the "Learned Rules" section at the bottom of this file.
+1. When the user corrects you or you make a mistake, **immediately append a new rule** to the
+   "Learned Rules" section at the bottom of this file.
 2. Rules are numbered sequentially and written as clear, imperative instructions.
 3. Format: `N. [CATEGORY] Never/Always do X — because Y.`
 4. Categories: `[STYLE]`, `[CODE]`, `[ARCH]`, `[TOOL]`, `[PROCESS]`, `[DATA]`, `[UX]`, `[OTHER]`
@@ -72,3 +74,4 @@ This file contains a growing ruleset that improves over time. **At session start
 
 1. [PROCESS] Always stage and commit related changes together in their own commit. Unrelated changes go in separate commits.
 2. [STYLE] Never mention Claude, AI assistants, or similar tools in commit messages.
+3. [ARCH] Never commit skill test outputs (.redesign/, surfit-ia-*/, or any client redesign artifact) — they are gitignored and local only.
