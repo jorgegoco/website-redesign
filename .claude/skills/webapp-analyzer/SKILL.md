@@ -1,6 +1,5 @@
 ---
 name: webapp-analyzer
-model: sonnet
 description: >
   Extract and analyze the full anatomy of a live webapp for redesign purposes — content, structure,
   visual design, components, navigation, responsiveness, and API surface. Use this skill whenever
@@ -15,9 +14,9 @@ description: >
 
 # Webapp Analyzer
 
-Extract everything important from a live webapp to prepare for a redesign. This skill uses Chrome
-DevTools MCP tools to crawl, screenshot, and programmatically extract content, structure, design
-tokens, navigation, components, and API surface from any website.
+Crawl a live website the way a thorough human analyst would: follow every clickable element,
+reveal hidden content by clicking tabs, cards, and toggles, and map every interactive state.
+Works for SPAs, multi-page sites, and anything in between. URL-agnostic.
 
 ## Prerequisites
 
@@ -26,327 +25,420 @@ tokens, navigation, components, and API surface from any website.
 
 ## Scripts
 
-All JavaScript extraction scripts live in `scripts/` alongside this file. Each is an IIFE that
-returns JSON and is designed to be injected via `mcp__chrome-devtools__evaluate_script`.
+All JavaScript extraction scripts live in `scripts/` alongside this file. Each is designed to
+be injected via `mcp__chrome-devtools__evaluate_script`.
 
 | Script | Purpose |
 |--------|---------|
-| `scripts/page_discovery.js` | Smart link collection with grouping, SPA scroll section detection |
-| `scripts/nav_extraction.js` | Navigation structure extraction (nav, header, sidebar elements) |
 | `scripts/content_extraction.js` | Headings, body text, images, CTAs, forms, meta tags |
-| `scripts/component_detection.js` | Repeated class patterns, framework detection, landmarks |
+| `scripts/clickable_discovery.js` | All cursor:pointer + onclick elements (non-ARIA) |
 | `scripts/design_tokens.js` | CSS variables, colors, fonts, spacing, border radii, layouts |
 | `scripts/api_surface.js` | Client state, scripts, stylesheets, third-party dependencies |
-
-A Python loader is also available at `scripts/scripts.py` for programmatic access.
 
 ## MCP Tools Reference
 
 | Tool | Used for |
 |------|----------|
-| `mcp__chrome-devtools__list_pages` | Get current tab context |
-| `mcp__chrome-devtools__navigate_page` | Navigate to URLs |
-| `mcp__chrome-devtools__evaluate_script` | Inject JS extraction scripts |
-| `mcp__chrome-devtools__resize_page` | Set viewport for responsive captures |
-| `mcp__chrome-devtools__take_screenshot` | Capture visual state |
-| `mcp__chrome-devtools__take_snapshot` | Accessibility tree / page text |
-| `mcp__chrome-devtools__list_network_requests` | API and resource discovery |
+| `mcp__chrome-devtools__navigate_page` | Navigate to URL or back |
+| `mcp__chrome-devtools__resize_page` | Set viewport (1440×900, once at start) |
+| `mcp__chrome-devtools__take_screenshot` | Capture viewport — **never fullPage** |
+| `mcp__chrome-devtools__take_snapshot` | Get a11y tree with element UIDs |
+| `mcp__chrome-devtools__click` | Click element by UID (for ARIA-role elements) |
+| `mcp__chrome-devtools__press_key` | Send keyboard events (Escape, PageDown, etc.) |
+| `mcp__chrome-devtools__wait_for` | Wait for text/element after navigation |
+| `mcp__chrome-devtools__evaluate_script` | Inject JS for discovery, clicks, content extraction |
+| `mcp__chrome-devtools__list_network_requests` | API call discovery |
 
-## Workflow Overview
+---
 
-The analysis runs in 6 phases. Each phase produces a section of the final report.
+## Algorithm Overview
+
+BFS crawler. Every interactive element — whether it has an ARIA role or not — goes into the
+queue. Process each item, discover new items from the resulting state, repeat.
 
 ```
-Phase 1: Page Discovery       → grouped sitemap of pages/routes/sections
-Phase 2: Visual Capture        → screenshots at desktop, tablet, mobile breakpoints
-Phase 3: Content Extraction    → text, headings, images, labels, CTAs
-Phase 4: Structure & Components → DOM tree, component patterns, navigation
-Phase 5: Design Tokens         → colors, typography, spacing, layout grid, CSS variables
-Phase 6: API & Data Surface    → network requests, data endpoints, client-side state
+QUEUE     = [start_url]
+VISITED   = {}    ← URL strings + element signature strings
+
+resize viewport to 1440×900 (once)
+
+while QUEUE not empty:
+  item = QUEUE.dequeue()
+  if item.sig in VISITED → skip
+  VISITED[item.sig] = true
+
+  ── Arrive ──────────────────────────────────────────────────
+  [1] If item is a URL: navigate, wait for load
+      If item is a click-action: record base state, click it, detect outcome
+
+  ── Capture ─────────────────────────────────────────────────
+  [2] Screenshot → {slug}_state_{N}.png
+  [3] Scroll to reveal below-fold content (see Scroll Step)
+  [4] Extract content: run content_extraction.js
+
+  ── Discover ────────────────────────────────────────────────
+  [5] a11y snapshot → collect interactive UIDs (buttons, links, inputs)
+  [6] Run clickable_discovery.js → collect cursor:pointer / onclick elements
+      not covered by a11y roles
+  [7] Merge into unified element list, deduplicate by signature
+
+  ── Queue new items ──────────────────────────────────────────
+  [8] For each element: classify minimally (see Element Rules) → add to QUEUE or skip
+
+After QUEUE empty:
+  [C1] Extract design tokens (once, on richest view)
+  [C2] Scan API surface (once)
+  [C3] Compile analysis-report.md
+```
+
+**Hard limits:**
+- Max **15 unique items** in VISITED (raise with user if needed)
+- **Desktop viewport only** (1440×900) — responsive only if user requests
+- **Never use `fullPage: true`** in screenshots — viewport only
+
+---
+
+## Step 1 — Arrive
+
+**For URL items:**
+```
+mcp__chrome-devtools__navigate_page url="{url}"
+mcp__chrome-devtools__wait_for (optional, if page loads slowly)
+```
+
+**For click-action items:**
+
+Record base state first:
+```javascript
+() => {
+  const root = document.querySelector('main,[role="main"],#root,body');
+  return { url: location.href, text: (root?.innerText||'').slice(0, 500) };
+}
+```
+
+Then click via UID (ARIA elements) or JS (non-ARIA elements):
+```
+mcp__chrome-devtools__click uid="{uid}"
+```
+or
+```javascript
+// For cursor:pointer / onclick elements without ARIA role:
+() => {
+  const el = [...document.querySelectorAll('*')].find(e =>
+    (e.innerText||'').trim().startsWith('{label}') &&
+    getComputedStyle(e).cursor === 'pointer' &&
+    !['A','BUTTON','INPUT','SELECT','TEXTAREA'].includes(e.tagName)
+  );
+  if (el) { el.click(); return 'clicked'; }
+  return 'not found';
+}
 ```
 
 ---
 
-## Phase 1: Page Discovery
+## Step 2 — Screenshot
 
-**Goal:** Build a grouped map of all pages, routes, and scroll sections.
+```
+mcp__chrome-devtools__take_screenshot → filePath: screenshots/{slug}_state_{N}.png
+```
 
-1. Use `mcp__chrome-devtools__list_pages` to get the current tab context.
-2. Navigate to the target URL with `mcp__chrome-devtools__navigate_page`.
-3. Run `scripts/page_discovery.js` via `mcp__chrome-devtools__evaluate_script`.
-
-   This script collects ALL internal/external links and SPA scroll sections, then groups them
-   intelligently:
-   - **Internal links** are grouped by URL path prefix using a trie. Dynamic segments
-     (e.g., `/product/123`, `/product/456`) are collapsed into `/product/{dynamic}`.
-     Pagination and filter variants are detected automatically.
-   - **External links** are grouped by domain.
-   - **Anchor-only links** (`#section`) are grouped together.
-   - **SPA scroll sections** (`<section>`, elements with `[id]`) are detected with their
-     nearest heading and vertical position (top/middle/bottom).
-   - The script classifies the site as `spa`, `multi-page`, or `hybrid`.
-
-   Output shape:
-   ```json
-   {
-     "siteType": "spa|multi-page|hybrid",
-     "stats": { "totalLinksFound": N, "totalScrollSections": N, "groups": N },
-     "groups": [
-       { "name": "/blog", "type": "internal", "totalUrls": 87, "representative": [...] },
-       { "name": "SPA scroll sections", "type": "scroll-section", "representative": [...] },
-       { "name": "External: instagram.com", "type": "external", "totalUrls": 3 }
-     ]
-   }
-   ```
-
-4. Run `scripts/nav_extraction.js` via `mcp__chrome-devtools__evaluate_script` to extract
-   navigation structure (nav elements, menus, sidebar).
-
-5. Present the grouped site map to the user. Representative URLs are auto-selected per group.
-   The user can adjust by adding/removing groups or individual URLs. For SPAs, scroll sections
-   serve as the "pages" to analyze.
+**View every screenshot immediately** — it reveals what the user actually sees.
 
 ---
 
-## Phase 2: Visual Capture
+## Step 3 — Scroll Step
 
-**Goal:** Screenshot each page at 3 breakpoints to document current visual state.
-
-For each page in the analysis set:
-
-1. Navigate to the page with `mcp__chrome-devtools__navigate_page`.
-2. Capture at **desktop** (1440x900):
-   - `mcp__chrome-devtools__resize_page` → width: 1440, height: 900
-   - `mcp__chrome-devtools__take_screenshot`
-3. Capture at **tablet** (768x1024):
-   - `mcp__chrome-devtools__resize_page` → width: 768, height: 1024
-   - `mcp__chrome-devtools__take_screenshot`
-4. Capture at **mobile** (375x812):
-   - `mcp__chrome-devtools__resize_page` → width: 375, height: 812
-   - `mcp__chrome-devtools__take_screenshot`
-5. Restore to desktop width when done.
-
-Save screenshots to the working directory with descriptive names: `{page-slug}_{breakpoint}.png`
-
-After capturing, note any visible responsive issues (overlapping elements, hidden content,
-broken layouts) — these are valuable redesign signals.
-
----
-
-## Phase 3: Content Extraction
-
-**Goal:** Extract all textual content, headings, images, and calls-to-action.
-
-1. Run `scripts/content_extraction.js` via `mcp__chrome-devtools__evaluate_script`.
-
-   This extracts: heading hierarchy, main content text (up to 10,000 chars), images with alt
-   text audit, CTAs/buttons, forms with fields, and meta information (title, description,
-   OG image, canonical, language).
-
-2. Also use `mcp__chrome-devtools__take_snapshot` for a clean text-only dump of the page.
-
-### 3a. Language & Content Mismatch Detection (required)
-
-After the main extraction, run this additional check to detect language inconsistencies.
-Record the results explicitly in the report — downstream skills depend on this:
+Scroll through the full page to reveal lazy-loaded and below-fold content before running
+discovery. This ensures interactive elements below the fold are captured.
 
 ```javascript
-(() => {
-  const pageLang = document.documentElement.lang || 'not-declared';
-  const spanishPatterns = /[áéíóúüñ¿¡]/i;
+// Scroll to 1/3
+() => { window.scrollTo(0, document.body.scrollHeight / 3); }
+```
+→ Take screenshot only if new content/sections are visible (compare text fingerprint)
+
+```javascript
+// Scroll to 2/3
+() => { window.scrollTo(0, document.body.scrollHeight * 2 / 3); }
+```
+→ Take screenshot only if new content visible
+
+```javascript
+// Restore scroll position
+() => { window.scrollTo(0, 0); }
+```
+
+Name scroll screenshots: `{slug}_scroll1.png`, `{slug}_scroll2.png` (only when new content found).
+
+---
+
+## Step 4 — Content Extraction
+
+Run `scripts/content_extraction.js` via `evaluate_script`. Captures: headings, main text,
+images (with alt audit), CTAs, forms, meta (title, description, OG, canonical, lang).
+
+Also run language mismatch check:
+```javascript
+() => {
+  const lang = document.documentElement.lang || 'not-declared';
+  const nonLatinAscii = /[^\x00-\x7F]/;
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-  const mixedNodes = [];
+  const foreign = [];
   let node;
-  while ((node = walker.nextNode()) && mixedNodes.length < 20) {
-    const text = node.textContent.trim();
-    if (text.length > 10 && spanishPatterns.test(text)) {
-      mixedNodes.push(text.slice(0, 120));
-    }
+  while ((node = walker.nextNode()) && foreign.length < 10) {
+    const t = node.textContent.trim();
+    if (t.length > 8 && nonLatinAscii.test(t)) foreign.push(t.slice(0, 100));
   }
-  return { pageLang, mixedLanguageTextFound: mixedNodes.length > 0, examples: mixedNodes.slice(0, 5) };
-})()
+  return { lang, foreignTextFound: foreign.length > 0, examples: foreign };
+}
 ```
 
-Record the output in the report under "Language Notes" (see report template below).
+---
 
-### 3b. Authenticated Resource Link Detection (required)
+## Step 5 — a11y Snapshot
 
-Identify any links that point to authenticated resources — these must be preserved verbatim
-in the redesign output. Run:
+```
+mcp__chrome-devtools__take_snapshot
+```
+
+Collects all elements with ARIA-interactive roles: `button`, `link`, `checkbox`, `combobox`,
+`listbox`, `menuitem`, `tab`, `textbox`. Each has a `uid` for `mcp__chrome-devtools__click`.
+
+---
+
+## Step 6 — JS Discovery (non-ARIA elements)
+
+Run `scripts/clickable_discovery.js`. This finds all `cursor:pointer` and `onclick` elements
+that have **no ARIA-interactive role** — common in SPAs built with Tailwind, Bootstrap, or
+custom CSS where clickable cards, tiles, and overlays use plain `div`/`span`.
+
+The script returns: `{ tag, text, classes, top, left, width, height }` for each element.
+Use the `text` field as the label when building element signatures and clicking via JS.
+
+---
+
+## Step 7 — Merge and Deduplicate
+
+Build a unified element list from steps 5 and 6. Deduplicate by signature:
+
+```
+sig = normalize(label_or_text) + "|" + normalize(href_or_url)
+```
+
+Where `normalize` means: lowercase, trim, collapse whitespace.
+
+For elements with identical text and visually overlapping positions (parent + child both
+clickable), keep only the outermost (largest bounding box).
+
+---
+
+## Step 8 — Queue New Items
+
+For each element in the unified list:
+
+| Condition | Action |
+|-----------|--------|
+| `sig` already in VISITED | Skip |
+| `input[type=file]` | Record `label` + `accept`. Never click. Add to report only. |
+| Link to **external domain** | Record `domain` + `label`. Skip. |
+| Link to same-site URL, same path + `#hash` | Record as anchor. Skip. |
+| Link to same-site URL, **new path** | Template-deduplicate, then add URL to QUEUE |
+| Anything else (button, div, span…) | Add as click-action to QUEUE |
+
+**Template deduplication:** Before queuing a same-site URL, strip trailing numeric/slug
+segments (`/blog/post-123` → `/blog/`, `/products/red-shirt` → `/products/`). If that pattern
+is already in VISITED or QUEUE, record "template — pattern ×N, analyzed 1" and skip.
+
+**Repeated-element deduplication:** If 3+ click-actions share identical label text and CSS
+class fingerprint, queue ONE and note "×N instances". Skip the rest.
+
+---
+
+## Outcome Detection
+
+Run immediately after any click:
 
 ```javascript
-(() => {
-  const authPatterns = ['/app', '/dashboard', '/login', '/signup', '/register', '/account', '/portal'];
-  const allLinks = [...document.querySelectorAll('a[href]')];
-  const authLinks = allLinks.filter(a => {
-    const href = a.getAttribute('href') || '';
-    return authPatterns.some(p => href.includes(p)) || (href.startsWith('http') && !href.includes(window.location.hostname));
-  }).map(a => ({
-    text: a.textContent.trim().slice(0, 80),
-    href: a.getAttribute('href'),
-    isExternal: a.getAttribute('href').startsWith('http'),
-    isCTA: ['button', 'btn', 'cta'].some(c => a.className.includes(c)) || a.closest('button') !== null
-  }));
-  return { authenticatedLinks: authLinks };
-})()
+() => ({
+  url: location.href,
+  text: (document.querySelector('main,[role="main"],#root,body')?.innerText||'').slice(0,500),
+  hasOverlay: [...document.querySelectorAll('*')].some(el => {
+    const s = getComputedStyle(el);
+    return s.position === 'fixed' && parseInt(s.zIndex||'0') > 50 && el.offsetHeight > 200;
+  })
+})
 ```
 
-Record all results in the "Authenticated Resource Links" section of the report (see template).
-If no authenticated links are found, explicitly state "None found — this appears to be a
-purely informational/marketing site."
+| Outcome | Condition | Response |
+|---------|-----------|----------|
+| **A — New page** | URL changed | Screenshot → `{slug}_landing.png`. Add URL to QUEUE. Navigate back. |
+| **B — Overlay** | `hasOverlay` true | Screenshot → `{slug}_modal_{label}.png`. Dismiss (backdrop click or Escape). Then re-run discovery on dismissed state. |
+| **C — Content changed** | Same URL, `text` differs | Screenshot → `{slug}_{label}.png`. **Re-run discovery on expanded state (Steps 5–8) before restoring.** Then restore. |
+| **D — No change** | URL same, text same, no overlay | Record "dead — no effect". |
+
+**Key rule for outcome C:** When a click reveals new content (toggled section, panel, tab),
+treat the expanded state like a new page — run Steps 5–8 on it, queue any new elements found,
+then restore state. This ensures hidden-behind-toggle content is fully explored.
 
 ---
 
-## Phase 4: Structure & Components
+## State Restoration
 
-**Goal:** Map the DOM structure, identify reusable component patterns, and document the
-information architecture.
+After processing each interaction, restore to base state before the next:
 
-### 4a. DOM Structure
-
-Use `mcp__chrome-devtools__take_snapshot` to get the accessibility tree. This reveals:
-- Landmark regions (header, nav, main, aside, footer)
-- ARIA roles and labels
-- Interactive element inventory
-- Heading hierarchy (accessibility compliance)
-
-### 4b. Component Pattern Detection
-
-Run `scripts/component_detection.js` via `mcp__chrome-devtools__evaluate_script`.
-
-This detects:
-- Repeated class patterns (3+ uses = likely component)
-- Framework hints (React/Next.js, Angular, Vue/Nuxt, Svelte, jQuery, Bootstrap, Tailwind)
-- Semantic landmark structure
-
-### 4c. Navigation & Information Architecture
-
-Combine the nav data from Phase 1 with the landmark data to map out:
-- Primary navigation (top-level pages)
-- Secondary navigation (sidebar, footer)
-- Breadcrumbs
-- User flows (login → dashboard → settings, etc.)
+| What was opened | How to restore |
+|-----------------|---------------|
+| Fixed overlay with backdrop | `evaluate_script`: click the backdrop div that has `onclick` |
+| Fixed overlay (Escape closes it) | `press_key key="Escape"` |
+| Toggle / accordion (div click) | `evaluate_script`: `el.click()` on the same element |
+| URL navigation | `navigate_page type="back"` |
+| Scroll position | `evaluate_script`: `window.scrollTo(0, 0)` |
 
 ---
 
-## Phase 5: Design Tokens
+## Phase C: Post-Queue Steps
 
-**Goal:** Extract the visual design system — colors, typography, spacing, and layout patterns.
+### C1 — Design Tokens
 
-Run `scripts/design_tokens.js` via `mcp__chrome-devtools__evaluate_script`.
+Run `scripts/design_tokens.js` on the richest view. Extracts: CSS custom properties, colors,
+font families/sizes/weights, spacing, border radii, flex/grid layout counts.
 
-This extracts:
-- CSS custom properties (`:root` / `:host` variables)
-- Colors in use (from 300 sampled elements: text, background, border)
-- Typography (font families, sizes, weights, line heights)
-- Spacing patterns (padding, margin, gap)
-- Border radii
-- Layout patterns (flex vs grid usage counts)
+### C2 — API Surface
 
----
+Run `scripts/api_surface.js` + `mcp__chrome-devtools__list_network_requests` (filter: xhr,
+fetch, script, stylesheet, document). Flag any 404s.
 
-## Phase 6: API & Data Surface
+### C3 — Compile Report
 
-**Goal:** Understand what data the app loads and from where.
-
-1. Use `mcp__chrome-devtools__list_network_requests` to discover API calls and resources.
-2. Run `scripts/api_surface.js` via `mcp__chrome-devtools__evaluate_script`.
-
-   This detects:
-   - Client-side state (Redux, Next.js data, Nuxt state)
-   - Script and stylesheet resources
-   - Third-party service domains (analytics, CDNs, etc.)
+Write `analysis-report.md` to the output directory using the template below.
 
 ---
 
-## Output: The Analysis Report
-
-After all phases complete, compile everything into a structured Markdown report. Include
-screenshot file paths in the Responsive Behavior section.
+## Report Template
 
 ```markdown
 # Webapp Analysis Report: {Site Name}
-**URL:** {url}
+**URL:** {start_url}
 **Date:** {date}
-**Pages Analyzed:** {count}
-**Site Type:** {spa|multi-page|hybrid}
+**Views analyzed:** {N}
+**Site type:** {spa | multi-page | hybrid}
 
-## 1. Site Map & Navigation
-- Grouped page inventory (from Phase 1 smart grouping)
-- Navigation structure (primary, secondary, footer)
-- Information architecture
+---
 
-### Authenticated Resource Links
-Links pointing to app/dashboard/login resources that must be preserved in the redesign:
-| CTA Text | URL | Location | Type |
-|----------|-----|----------|------|
-| (e.g., "Entrar al Dashboard") | (e.g., https://app.domain.com) | Hero CTA | Authenticated app |
+## Sitemap
 
-If none: "None found — informational/marketing site only."
+{ASCII tree — views and how each was reached, with screenshot filenames}
 
-## 2. Visual Design System
+---
+
+## Views
+
+### View 1: {name}
+**URL / trigger:** {url or "clicking X on View N"}
+**Screenshots:** `screenshots/{slug}_landing.png`, `{slug}_scroll1.png` (if applicable)
+
+**Content:**
+- Title: ...
+- H1: ...
+- Key text: ...
+- Images: N (M missing alt)
+- Forms: ...
+- Meta: description={yes/no}, OG image={yes/no}, canonical={yes/no}, lang="{value}"
+
+**Interaction map:**
+
+| Element | Source | Outcome | Screenshot |
+|---------|--------|---------|------------|
+| "..." | a11y button | C — content revealed | {slug}_{label}.png |
+| "..." | JS cursor:pointer div | C — panel opened | {slug}_{label}.png |
+| "..." | a11y link | A — navigated to /path | {slug2}_landing.png |
+| "..." | a11y link | external — example.com | — |
+| "..." | file input | skip — accepts image/* | — |
+| "..." | a11y button | D — dead | — |
+
+---
+
+### View 2: {name}
+...
+
+---
+
+## Template Catalog
+
+| Template | URL pattern | Instances | Analyzed view |
+|----------|------------|-----------|--------------|
+| {name} | /{path}/{slug} | N | View N |
+
+---
+
+## Design Tokens
+
 ### Colors
-- Color palette with hex/RGB values
-- Usage context (primary, secondary, background, text, accent)
+| Role | Value | Tailwind/CSS |
+|------|-------|-------------|
+| Background | ... | ... |
+
 ### Typography
-- Font families
-- Font size scale
-- Weight variations
-- Line heights
+- Font families: ...
+- Size scale: ...
+- Weights: ...
+
 ### Spacing & Layout
-- Spacing scale
-- Grid/layout patterns
-- Border radii
+- Border radii: ...
+- Layout pattern: N flex / M grid containers
+- Main grid: ...
+- CSS custom properties: {list or "none"}
 
-## 3. Content Inventory
-### Per Page:
-- Heading hierarchy
-- Body content summary
-- Images (with alt text audit)
-- CTAs and interactive elements
-- Forms and input fields
+---
 
-## 4. Component Library
-- Detected repeated patterns
-- Framework identification
-- Landmark/semantic structure
-- Accessibility notes
+## External Links
 
-## 5. Technical Surface
-- CSS custom properties / design tokens
-- API endpoints discovered
-- Third-party dependencies
-- Client-side state management
+| Domain | Count | Purpose | Sample URL |
+|--------|-------|---------|------------|
 
-## 6. Responsive Behavior
-- Breakpoint screenshots: `screenshots/{page}_desktop.png`, `screenshots/{page}_tablet.png`, `screenshots/{page}_mobile.png`
-- Layout change observations
-- Mobile-specific issues noted
+---
 
-## 7. Redesign Signals
-- Accessibility gaps
-- Content hierarchy issues
-- Inconsistent design tokens
-- Performance observations
-- Mobile responsiveness problems
+## Technical Surface
+
+| Item | Detail |
+|------|--------|
+| Framework | ... |
+| Build | ... |
+| Main bundle | ... |
+| Stylesheets | ... (note 404s) |
+| API calls | ... |
+| Third-party | ... |
+| Client state | ... |
+
+---
+
+## Redesign Signals
+
+### Critical
+- ...
+
+### Structural
+- ...
 
 ### Language Notes
-- **Page language declaration:** `lang="{value}"` (or "not declared")
-- **Detected content language:** {language(s) found}
-- **Mismatch detected:** {Yes / No}
-- **Mixed-language examples:** {list up to 5 text snippets that differ from page lang}
-- **Recommendation:** {Translate all to page lang | Add functional toggle | Keep as-is with justification}
+- **Page lang:** `lang="{value}"`
+- **Foreign text detected:** {yes/no}
+- **Examples:** ...
+- **Recommendation:** ...
 ```
 
 ---
 
-## Tips for Best Results
+## Tips
 
-- **Authenticated apps**: Log in first before running the analysis, or ask the user to navigate
-  to the authenticated state.
-- **SPAs**: The page discovery script auto-detects scroll sections. For SPAs with client-side
-  routing, trigger route changes via clicks rather than direct navigation.
-- **Large sites**: The smart grouping automatically picks representative pages from each group.
-  Focus on one representative per group unless the user wants broader coverage.
-- **Design tokens**: If the site uses a known design system (Material UI, Chakra, etc.), note
-  this — it simplifies the redesign since token mapping is straightforward.
+- **View every screenshot** — it shows what the user actually sees, not what the DOM says.
+- **Scroll before discovery** — below-fold sections often contain interactive elements not in
+  the initial viewport.
+- **Re-run discovery after outcome C** — expanded panels and opened sections may contain new
+  links or buttons that were not in the original page state.
+- **JS discovery catches what a11y misses** — any `div` or `span` with `cursor:pointer` is
+  a potential interactive element. Run `clickable_discovery.js` every time.
+- **File inputs trigger browser dialogs** — never click them, just record their purpose.
+- **Dead buttons are redesign signals** — note every non-functional interactive element.
+- **Template deduplication** — if a card/blog/product pattern repeats, analyze one fully and
+  record the count. Do not analyze each instance individually.
