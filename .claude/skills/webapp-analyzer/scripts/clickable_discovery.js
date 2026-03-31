@@ -18,13 +18,18 @@
   for (const el of document.querySelectorAll('*')) {
     if (ARIA_COVERED.has(el.tagName)) continue;
 
-    // Must be visible
+    // Must be visible and interactive
     if (!el.offsetWidth || !el.offsetHeight) continue;
-
     const style = getComputedStyle(el);
-    const hasOnClick = typeof el.onclick === 'function';
+    if (style.visibility === 'hidden') continue;
+    if (style.pointerEvents === 'none') continue;
+
+    // cursor:pointer is the primary signal — works for all frameworks (React, Vue, Angular,
+    // Svelte) because they all set this via CSS. el.onclick only catches old-school inline
+    // onclick="..." attributes and misses addEventListener-based handlers used by modern SPAs.
     const isCursorPointer = style.cursor === 'pointer';
-    if (!hasOnClick && !isCursorPointer) continue;
+    const hasOnClick = typeof el.onclick === 'function'; // supplementary: catches legacy HTML
+    if (!isCursorPointer && !hasOnClick) continue;
 
     const rect = el.getBoundingClientRect();
     const top = Math.round(rect.top + window.scrollY);

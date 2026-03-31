@@ -1,4 +1,4 @@
-(() => {
+() => {
   const state = {};
   // Redux
   if (window.__REDUX_DEVTOOLS_EXTENSION__) state.redux = 'Redux store detected';
@@ -14,4 +14,4 @@
     .map(s => { try { return new URL(s).hostname } catch { return s } });
 
   return JSON.stringify({ state, scripts, stylesheets, thirdPartyDomains: [...new Set(thirdParty)] }, null, 2);
-})()
+}

@@ -10,6 +10,15 @@ description: >
   "capture the layout", or any request to understand an existing web interface before rebuilding it.
   Also trigger when the user pastes a URL and asks to understand its design, structure, or content.
   This skill requires the Chrome DevTools MCP tools to be connected.
+argument-hint: "<url>"
+disable-model-invocation: true
+model: claude-sonnet-4-6
+allowed-tools: >
+  mcp__chrome-devtools__navigate_page, mcp__chrome-devtools__resize_page,
+  mcp__chrome-devtools__take_screenshot, mcp__chrome-devtools__take_snapshot,
+  mcp__chrome-devtools__click, mcp__chrome-devtools__press_key,
+  mcp__chrome-devtools__wait_for, mcp__chrome-devtools__evaluate_script,
+  mcp__chrome-devtools__list_network_requests, Read, Write
 ---
 
 # Webapp Analyzer
@@ -56,9 +65,11 @@ be injected via `mcp__chrome-devtools__evaluate_script`.
 BFS crawler. Every interactive element — whether it has an ARIA role or not — goes into the
 queue. Process each item, discover new items from the resulting state, repeat.
 
+**Target URL:** `$ARGUMENTS` (passed when invoking `/webapp-analyzer <url>`)
+
 ```
-QUEUE     = [start_url]
-VISITED   = {}    ← URL strings + element signature strings
+QUEUE     = [$ARGUMENTS]   ← start URL from invocation argument
+VISITED   = {}             ← URL strings + element signature strings
 
 resize viewport to 1440×900 (once)
 
@@ -170,6 +181,9 @@ discovery. This ensures interactive elements below the fold are captured.
 
 Name scroll screenshots: `{slug}_scroll1.png`, `{slug}_scroll2.png` (only when new content found).
 
+Use 3 stops (1/3, 2/3, bottom) as the default. Add more stops if the page is clearly taller
+than 3 screens (e.g. long-form landing pages — scroll to 1/4, 1/2, 3/4, bottom instead).
+
 ---
 
 ## Step 4 — Content Extraction
@@ -222,10 +236,11 @@ Use the `text` field as the label when building element signatures and clicking 
 Build a unified element list from steps 5 and 6. Deduplicate by signature:
 
 ```
-sig = normalize(label_or_text) + "|" + normalize(href_or_url)
+sig = normalize(label_or_text) + "|" + normalize(href_or_url_or_"click")
 ```
 
-Where `normalize` means: lowercase, trim, collapse whitespace.
+Where `normalize` means: lowercase, trim, collapse whitespace. For elements without an href
+(buttons, divs, spans), use the literal string `"click"` as the second segment.
 
 For elements with identical text and visually overlapping positions (parent + child both
 clickable), keep only the outermost (largest bounding box).
@@ -264,7 +279,8 @@ Run immediately after any click:
   text: (document.querySelector('main,[role="main"],#root,body')?.innerText||'').slice(0,500),
   hasOverlay: [...document.querySelectorAll('*')].some(el => {
     const s = getComputedStyle(el);
-    return s.position === 'fixed' && parseInt(s.zIndex||'0') > 50 && el.offsetHeight > 200;
+    // zIndex >= 10 catches navs/dropdowns; offsetHeight >= 60 catches banners/drawers
+    return s.position === 'fixed' && parseInt(s.zIndex||'0') >= 10 && el.offsetHeight >= 60;
   })
 })
 ```
@@ -310,122 +326,8 @@ fetch, script, stylesheet, document). Flag any 404s.
 
 ### C3 — Compile Report
 
-Write `analysis-report.md` to the output directory using the template below.
-
----
-
-## Report Template
-
-```markdown
-# Webapp Analysis Report: {Site Name}
-**URL:** {start_url}
-**Date:** {date}
-**Views analyzed:** {N}
-**Site type:** {spa | multi-page | hybrid}
-
----
-
-## Sitemap
-
-{ASCII tree — views and how each was reached, with screenshot filenames}
-
----
-
-## Views
-
-### View 1: {name}
-**URL / trigger:** {url or "clicking X on View N"}
-**Screenshots:** `screenshots/{slug}_landing.png`, `{slug}_scroll1.png` (if applicable)
-
-**Content:**
-- Title: ...
-- H1: ...
-- Key text: ...
-- Images: N (M missing alt)
-- Forms: ...
-- Meta: description={yes/no}, OG image={yes/no}, canonical={yes/no}, lang="{value}"
-
-**Interaction map:**
-
-| Element | Source | Outcome | Screenshot |
-|---------|--------|---------|------------|
-| "..." | a11y button | C — content revealed | {slug}_{label}.png |
-| "..." | JS cursor:pointer div | C — panel opened | {slug}_{label}.png |
-| "..." | a11y link | A — navigated to /path | {slug2}_landing.png |
-| "..." | a11y link | external — example.com | — |
-| "..." | file input | skip — accepts image/* | — |
-| "..." | a11y button | D — dead | — |
-
----
-
-### View 2: {name}
-...
-
----
-
-## Template Catalog
-
-| Template | URL pattern | Instances | Analyzed view |
-|----------|------------|-----------|--------------|
-| {name} | /{path}/{slug} | N | View N |
-
----
-
-## Design Tokens
-
-### Colors
-| Role | Value | Tailwind/CSS |
-|------|-------|-------------|
-| Background | ... | ... |
-
-### Typography
-- Font families: ...
-- Size scale: ...
-- Weights: ...
-
-### Spacing & Layout
-- Border radii: ...
-- Layout pattern: N flex / M grid containers
-- Main grid: ...
-- CSS custom properties: {list or "none"}
-
----
-
-## External Links
-
-| Domain | Count | Purpose | Sample URL |
-|--------|-------|---------|------------|
-
----
-
-## Technical Surface
-
-| Item | Detail |
-|------|--------|
-| Framework | ... |
-| Build | ... |
-| Main bundle | ... |
-| Stylesheets | ... (note 404s) |
-| API calls | ... |
-| Third-party | ... |
-| Client state | ... |
-
----
-
-## Redesign Signals
-
-### Critical
-- ...
-
-### Structural
-- ...
-
-### Language Notes
-- **Page lang:** `lang="{value}"`
-- **Foreign text detected:** {yes/no}
-- **Examples:** ...
-- **Recommendation:** ...
-```
+Write `analysis-report.md` to the output directory following the structure in
+[report_template.md](report_template.md).
 
 ---
 

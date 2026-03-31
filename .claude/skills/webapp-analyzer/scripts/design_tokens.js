@@ -1,4 +1,4 @@
-(() => {
+() => {
   // --- CSS Custom Properties (design tokens) ---
   const rootStyles = getComputedStyle(document.documentElement);
   const cssVars = {};
@@ -71,4 +71,4 @@
     borderRadii: [...radii],
     layouts
   }, null, 2);
-})()
+}
