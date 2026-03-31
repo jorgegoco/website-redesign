@@ -20,6 +20,9 @@ npm-debug.log*
 # Temporary documentation (local only)
 docs/
 
+# Claude Code local overrides (auto-generated, redundant when settings.json allows *)
+.claude/settings.local.json
+
 # Skill test outputs — local only, never track samples or redesign artifacts
 .redesign/
 surfit-ia-*/
